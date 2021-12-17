@@ -1,35 +1,46 @@
 public class Core extends Thread {
 
+    // PUBLIC VARIABLES
     public Core CORE;
     public Server SERVER;
     public Database DATABASE;
+    public Game GAME = new Game(this);
 
+    /*
+    +----------------------------+
+    | START / CREATION FUNCTIONS |
+    +----------------------------+
+    */
     public Core()
     {
         CORE = this;
+        DATABASE = new Database(CORE);
         SERVER = new Server(1234, this);
-        SERVER.start();
-        DATABASE = new Database();
 
+        this.start();
     }
-
     public void run()
     {
-        DATABASE.Log("CORE is Starting" ,"system");
         startCore();
     }
-
-
     public void startCore()
     {
-        System.out.println("Starting Core\n");
+        DATABASE.Log("CORE is Starting" ,"system");
+        SERVER.start();
     }
 
+
+
+
+    /*
+    +---------------------------+
+    | GENERAL PURPOSE FUNCTIONS |
+    +---------------------------+
+    */
     public void initiateShutdown()
     {
         DATABASE.shutdown();
         SERVER.shutdown();
-
         try
         {
             Thread.sleep(1000);

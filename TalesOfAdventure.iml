@@ -9,6 +9,9 @@
       <sourceFolder url="file://$MODULE_DIR$/Source/Game/Player" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Source/Launcher/Start" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Source/Server" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/GameClient/Client" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Game/PlayGame" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TestingStage/Test" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

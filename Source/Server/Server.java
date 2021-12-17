@@ -2,42 +2,86 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class Server extends Thread {
 
+    //PRIVATE VARIABLES
     private final Core CORE;
     private final int Port;
     private ServerSocket serverSocket;
-    private ArrayList<Client> Clients = new ArrayList<>();
+    private final ArrayList<Client> clients = new ArrayList<>();
 
+    /*
+    +----------------------------+
+    | START / CREATION FUNCTIONS |
+    +----------------------------+
+    */
     public Server(int port, Core core)
     {
         Port = port;
         CORE = core;
     }
-
     @Override
     public void run() {
+        serverStart();
+    }
+    private void serverStart(){
         try
         {
             serverSocket = new ServerSocket(Port);
+            CORE.DATABASE.Log("SERVER is Starting", "server");
             while(!serverSocket.isClosed()) // Always Running and Accepting new Connections
             {
-                System.out.println("SERVER: Accepting Clients\n");
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("\nSERVER: Accepted Client From " + clientSocket + "\n");
+                CORE.DATABASE.Log("Accepted Client From " + clientSocket.getInetAddress() + ":" + clientSocket.getPort(), "server" );
                 Client client = new Client(clientSocket, CORE);
-                Clients.add(client);
                 client.start();
             }
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            System.out.println("Server Connection Closed");
         }
     }
 
+
+
+    /*
+    +------------------+
+    | GETTER FUNCTIONS |
+    +------------------+
+    */
+    public ArrayList<Client> getActivePlayers() {return clients;}
+
+
+    public void addClient(Client newClient) {System.out.println(newClient.getPlayer().getUsername());clients.add(newClient);}
+    public void removeClient(Client removeClient)
+    {
+
+        clients.remove(removeClient);
+
+
+//        for(int i = 0; i < clients.size(); i++)
+//        {
+//            Client checkClient = clients.get(i);
+//            if((checkClient.getPlayer().getUsername().equalsIgnoreCase(removeClient.getPlayer().getUsername())))
+//            {
+//                clients.remove(i);
+//                break;
+//            }
+//        }
+    }
+
+
+
+    /*
+    +---------------------------+
+    | GENERAL PURPOSE FUNCTIONS |
+    +---------------------------+
+    */
+    // Checks if USER exists in DATABASE
     public boolean handleClientLogin(String[] loginTokens)
     {
         if(loginTokens != null)
@@ -46,16 +90,18 @@ public class Server extends Thread {
             {
                 String loginUser = loginTokens[0];
                 String loginPass = CORE.DATABASE.hashPassword(loginTokens[1]);
-                System.out.println("SERVER: Handling Login " + loginUser);
+                CORE.DATABASE.Log("SERVER: Handling Login " + loginUser, "server");
                 return CORE.DATABASE.userAuthentication(loginUser, loginPass);
             }
         }
         return false;
     }
 
+
+    // Shutdown function for the SERVER
     public void shutdown()
     {
-        for(Client client : Clients)
+        for(Client client : clients)
         {
             client.msgClient("***************************");
             client.msgClient("| Server is Shutting Down |");

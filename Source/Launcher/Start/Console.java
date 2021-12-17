@@ -4,22 +4,28 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Console {
 
+    //PRIVATE VARIABLES
     private final Core CORE;
-    private final ConsoleUtility utility = new ConsoleUtility();
+    private final ConsoleUtil utility = new ConsoleUtil();
 
-    public Console(Core core) {
+    /*
+    +----------------------------+
+    | START / CREATION FUNCTIONS |
+    +----------------------------+
+    */
+    public Console(Core core)
+    {
         CORE = core;
     }
-
     //Always running and checking user input
     public void startConsole()
     {
         // Always On CMD Line for Server Administrator
-        System.out.println("******************");
-        System.out.println("| System Command |");
-        System.out.println("******************");
+        System.out.println("+----------------+");
+        System.out.println("| System Console |");
+        System.out.println("+----------------+");
         Scanner scan = new Scanner(System.in);
-        String cmd = null;
+        String cmd;
         while (true)
         {
             System.out.print("\nCMD: ");
@@ -27,9 +33,9 @@ public class Console {
             if(cmd.equalsIgnoreCase("quit") || cmd.equalsIgnoreCase("exit"))
             {
                 CORE.initiateShutdown();
-                System.out.println("\n***********************");
+                System.out.println("\n+---------------------+");
                 System.out.println("| Initiating Shutdown |");
-                System.out.println("***********************");
+                System.out.println("+---------------------+");
                 break;
             }
             else if(!cmd.isEmpty())
@@ -38,8 +44,6 @@ public class Console {
             }
         }
     }
-
-    //Checks input for command
     private void checkCommand(String input)
     {
         String[] cmdLine = StringUtils.split(input);
@@ -61,14 +65,22 @@ public class Console {
             option3 = cmdLine[3];
         }
 
-        // Checks for different Types of Commands
         if(cmd.equalsIgnoreCase("log"))
         {
             logCommand(option1, option2);
         }
+        else if(cmd.equalsIgnoreCase("active"))
+        {
+            listActivePlayersCommand();
+        }
     }
 
 
+    /*
+    +-------------------+
+    | COMMAND FUNCTIONS |
+    +-------------------+
+    */
     private void logCommand(String option, String amount)
     {
         int logAmount;
@@ -108,6 +120,15 @@ public class Console {
         else if (option.equalsIgnoreCase("/admin"))
         {
             CORE.DATABASE.getLogs("admin", logAmount);
+        }
+    }
+
+    // Prints out Usernames & CharacterNames of All Active Players
+    private void listActivePlayersCommand()
+    {
+        for(Client client : CORE.SERVER.getActivePlayers())
+        {
+            System.out.println(client.getPlayer().getUsername());
         }
     }
 

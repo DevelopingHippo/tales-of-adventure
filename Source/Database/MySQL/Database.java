@@ -2,26 +2,36 @@
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class Database {
 
+    // PRIVATE VARIABLES
+    private Core CORE;
     private Connection conn = null;
-    private DatabaseUtils utility;
+    private DatabaseUtil utility;
     private int logCount;
 
-    public Database()
+    /*
+    +----------------------------+
+    | START / CREATION FUNCTIONS |
+    +----------------------------+
+    */
+    public Database(Core core)
     {
+        CORE = core;
         try
         {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/toa?" + "user=toa&password=P@ssw0rd123!");
-            utility = new DatabaseUtils(conn);
+            utility = new DatabaseUtil(conn);
             setupDatabase();
         }
         catch (SQLException e)
         {
-            System.out.println("SQLException: " + e.getMessage());
-            System.out.println("SQLState: " + e.getSQLState());
-            System.out.println("VendorError: " + e.getErrorCode());
+            System.out.println("+------------------------------------------------+");
+            System.out.println("| Terminal Error: Connection to Database Failed! |");
+            System.out.println("+------------------------------------------------+");
+            System.exit(0);
         }
     }
     // Setup DATABASE values
@@ -31,18 +41,30 @@ public class Database {
         logCount = Integer.parseInt((utility.getResult(result, "logCount")));
     }
 
-    // Called during CORE Shutdown
-    public void shutdown()
-    {
-        try
-        {
-            conn.close();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    +---------------------------+
+    | GENERAL PURPOSE FUNCTIONS |
+    +---------------------------+
+    */
 
     //Public function for creating password hashes
     public String hashPassword(String password){
@@ -84,11 +106,12 @@ public class Database {
         return false;
     }
 
+    //Create New Account in Database
     public boolean createNewAccount(String username, String password)
     {
         try
         {
-            if(!utility.checkUser(username))
+            if(utility.checkUser(username))
             {
                 PreparedStatement sqlStmt = conn.prepareStatement("INSERT INTO account VALUES ( ? , ? )");
                 sqlStmt.setString(1, username);
@@ -113,21 +136,95 @@ public class Database {
         return false;
     }
 
-    public boolean createNewCharacter()
+    public boolean loadCharacterInfo(PlayerInfo playerInfo)
     {
-
+        if(!utility.checkCharacterName(playerInfo.getName()))
+        {
+            ResultSet results = utility.queryDatabase("SELECT * FROM playerCharacter WHERE name = '" + playerInfo.getName() + "'");
+            try
+            {
+                if(results.next())
+                {
+                    playerInfo.addLevel(Integer.parseInt(results.getString("level")));
+                    playerInfo.addExp(Integer.parseInt(results.getString("totExp")));
+                    return true;
+                }
+            }
+            catch (SQLException e)
+            {
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
         return false;
     }
 
+    public void createNewCharacter(Player PLAYER)
+    {
+        PLAYER.getClient().msgClient("+---------------+");
+        PLAYER.getClient().msgClient("| New Character |");
+        PLAYER.getClient().msgClient("+---------------+");
+        PLAYER.getClient().msgClient("Name: ");
+        String characterName = PLAYER.getClient().getStringInput();
+
+        while(utility.checkCharacterName(characterName))
+        {
+            PLAYER.getClient().msgClient("Character Name Already Exists");
+            PLAYER.getClient().msgClient("Try Again");
+            PLAYER.getClient().msgClient("Name: ");
+            characterName = PLAYER.getClient().getStringInput();
+        }
+        try
+        {
+            PreparedStatement createCharStmt = conn.prepareStatement("INSERT INTO playerCharacter VALUES (?, ?, ?, ?)");
+            createCharStmt.setString(1, PLAYER.getUsername());
+            createCharStmt.setString(2, characterName);
+            createCharStmt.setString(3, "0");
+            createCharStmt.setString(4, "0");
+            createCharStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        PLAYER.getPlayerInfo().setName(characterName);
+        loadCharacterInfo(PLAYER.getPlayerInfo());
+    }
+
+    public ArrayList<String> getCharacterList(String username)
+    {
+        ResultSet results = utility.queryDatabase("SELECT name, level FROM playerCharacter WHERE username='" + username + "'");
+        ArrayList<String> characterList = new ArrayList<>();
+        while (true)
+        {
+            try
+            {
+                if (!results.next()) break;
+                characterList.add(results.getString("name"));
+            }
+            catch (SQLException e)
+            {
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+            }
+        }
+        return characterList;
+    }
+
+    // Insert Log into Database
     public void Log(String logMessage, String type)
     {
         if(logMessage.length() <= 100 && type.length() <= 15)
         {
-            logCount++;
+            int logNum = logCount++;
             try
             {
                 PreparedStatement sqlStmt = conn.prepareStatement("INSERT INTO Log VALUES (?, ?, ?, ? , ?)");
-                sqlStmt.setString(1, Integer.toString(logCount));
+                sqlStmt.setString(1, String.valueOf(logNum));
                 sqlStmt.setString(2, String.valueOf(LocalDate.now()));
                 sqlStmt.setString(3, String.valueOf(LocalTime.now()));
                 sqlStmt.setString(4, type);
@@ -136,11 +233,21 @@ public class Database {
             }
             catch (SQLException e)
             {
-                e.printStackTrace();
+                if(e.getErrorCode() == 1062)
+                {
+                    this.Log(logMessage, type);
+                }
+                else
+                {
+                    System.out.println("SQLException: " + e.getMessage());
+                    System.out.println("SQLState: " + e.getSQLState());
+                    System.out.println("VendorError: " + e.getErrorCode());
+                }
             }
         }
     }
 
+    // Prints out Logs in the Database
     public void getLogs(String type, int logAmount)
     {
         ResultSet results = null;
@@ -158,9 +265,9 @@ public class Database {
             try
             {
                 if (!results.next()) break;
-                System.out.print("[" + results.getString("logID") + "] ");
-                System.out.print("[" + results.getString("type") + "] ");
-                System.out.print("[" + results.getString("time") +"] ");
+                System.out.print("[" + results.getString("logID") + "]\t");
+                System.out.print("[" + results.getString("type") + "]\t");
+                System.out.print("[" + results.getString("time") +"]\t");
                 System.out.println(results.getString("message"));
             }
             catch (SQLException e)
@@ -169,4 +276,19 @@ public class Database {
             }
         }
     }
+
+    // Called during CORE Shutdown
+    public void shutdown()
+    {
+        try
+        {
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
 }

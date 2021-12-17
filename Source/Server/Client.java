@@ -2,9 +2,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Objects;
 
 public class Client extends Thread {
 
+    // PRIVATE VARIABLES
     private final Core CORE;
     private Player PLAYER;
     private final Socket clientSocket;
@@ -12,61 +14,115 @@ public class Client extends Thread {
     private InputStream inputStream;
     private BufferedReader reader;
 
-
-    public Client(Socket clientsocket, Core core)
-    {
+    /*
+    +----------------------------+
+    | START / CREATION FUNCTIONS |
+    +----------------------------+
+    */
+    public Client(Socket clientsocket, Core core) {
         CORE = core;
         clientSocket = clientsocket;
     }
-
-    // Creates Thread for ClientInstance and goes straight to handleClientSocket
     @Override
     public void run() {
-        try {
-            System.out.println("Handling Socket");
-            handleClientSocket();
-        } catch (IOException e) {
-            e.printStackTrace();
+        try
+        {
+            clientLogin();
+        }
+        catch (IOException e)
+        {
+            this.disconnect();
+            CORE.DATABASE.Log("Client Disconnected " + clientSocket.getInetAddress() + ":" + clientSocket.getPort(), "server" );
         }
     }
-
-    // Sets outputStream and reader(inputStream) for client, continuously checks reader
-    // for information, takes input and splits into tokens and checks tokens
-    private void handleClientSocket() throws IOException {
+    private void clientLogin() throws IOException
+    {
         inputStream = clientSocket.getInputStream();
         outputStream = clientSocket.getOutputStream();
         reader = new BufferedReader(new InputStreamReader(inputStream));
         boolean loginStatus = false;
-        String line;
-        String[] tokens;
-
-        msgClient("***********************");
-        msgClient("| Username & Password |");
-        msgClient("***********************");
-
-        while (!loginStatus) {
-            line = reader.readLine();
-            tokens = StringUtils.split(line);
+        String[] tokens = new String[2];
+        String username = "notSet";
+        for(int i = 0; i < 3; i++)
+        {
+            msgClient("+----------+");
+            msgClient("| Username |");
+            msgClient("+----------+");
+            tokens[0] = reader.readLine();
+            msgClient("+----------+");
+            msgClient("| Password |");
+            msgClient("+----------+");
+            tokens[1] = reader.readLine();
             loginStatus = CORE.SERVER.handleClientLogin(tokens);
+            if(loginStatus)
+            {
+                username = tokens[0];
+                msgClient("+---------------+");
+                msgClient("| Login Success |");
+                msgClient("+---------------+");
+                break;
+            }
+            else
+            {
+                msgClient("Login Failed: Try Again");
+            }
         }
-        msgClient("Successful Login");
+        if(loginStatus)
+        {
+            PLAYER = new Player(CORE, this, username);
+            CORE.SERVER.addClient(this);
+            PLAYER.startPlayer();
+        }
+        this.disconnect();
     }
 
-    // Send Message To Client
-    public void msgClient(String msg){
-        try {
-            outputStream.write( ("\t" + msg +"\r\n").getBytes() );
-        } catch (IOException e) {
-            e.printStackTrace();
+
+
+
+
+
+    /*
+    +------------------+
+    | GETTER FUNCTIONS |
+    +------------------+
+    */
+    public Player getPlayer() {return this.PLAYER;}
+    public int getNumInput(int min, int max){
+        int intInput = Integer.parseInt(Objects.requireNonNull(getInput()));
+        if(intInput < min && intInput > max)
+        {
+            msgClient("BAD INPUT!");
+            intInput = getNumInput(min, max);
         }
+        return intInput;
     }
 
-    // Disconnect Client From Server
-    public void disconnect() {
-        msgClient("Disconnecting!");
-        try {
+
+    public String getStringInput(){return getInput();}
+
+
+
+
+
+
+
+    /*
+    +---------------------------+
+    | GENERAL PURPOSE FUNCTIONS |
+    +---------------------------+
+    */
+    public void msgClient(String msg){try {outputStream.write( (msg +"\r\n").getBytes() );} catch (IOException e) {disconnect();}}
+    private String getInput() {try {return reader.readLine();} catch (IOException e) {disconnect();} return null;}
+
+    public void disconnect()
+    {
+        CORE.SERVER.removeClient(this);
+        try
+        {
             clientSocket.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
         this.interrupt();
