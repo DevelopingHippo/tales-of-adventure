@@ -2,17 +2,17 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.LinkedList;
 
 
-public class Server extends Thread {
+public class Server implements Runnable {
 
     //PRIVATE VARIABLES
     private final Core CORE;
     private final int Port;
     private ServerSocket serverSocket;
-    private final ArrayList<Client> clients = new ArrayList<>();
-
+    private final LinkedList<Client> clients = new LinkedList<>();
+    volatile boolean shutdown = false;
     /*
     +----------------------------+
     | START / CREATION FUNCTIONS |
@@ -25,7 +25,11 @@ public class Server extends Thread {
     }
     @Override
     public void run() {
-        serverStart();
+        while(!shutdown)
+        {
+            serverStart();
+        }
+        System.out.println("Server Connection Closed");
     }
     private void serverStart(){
         try
@@ -37,12 +41,13 @@ public class Server extends Thread {
                 Socket clientSocket = serverSocket.accept();
                 CORE.DATABASE.Log("Accepted Client From " + clientSocket.getInetAddress() + ":" + clientSocket.getPort(), "server" );
                 Client client = new Client(clientSocket, CORE);
-                client.start();
+                Thread clientThread = new Thread(client);
+                clientThread.start();
             }
         }
         catch(IOException e)
         {
-            System.out.println("Server Connection Closed");
+            serverShutdown();
         }
     }
 
@@ -53,13 +58,12 @@ public class Server extends Thread {
     | GETTER FUNCTIONS |
     +------------------+
     */
-    public ArrayList<Client> getActivePlayers() {return clients;}
+    public LinkedList<Client> getActivePlayers() {return clients;}
 
 
-    public void addClient(Client newClient) {System.out.println(newClient.getPlayer().getUsername());clients.add(newClient);}
+    public void addClient(Client newClient) {clients.add(newClient);}
     public void removeClient(Client removeClient)
     {
-
         clients.remove(removeClient);
 
 
@@ -99,14 +103,12 @@ public class Server extends Thread {
 
 
     // Shutdown function for the SERVER
-    public void shutdown()
+    public void serverShutdown()
     {
-        for(Client client : clients)
+        while(!clients.isEmpty())
         {
-            client.msgClient("***************************");
-            client.msgClient("| Server is Shutting Down |");
-            client.msgClient("***************************");
-            client.disconnect();
+            clients.get(0).alertClient("Server is Shutting Down");
+            clients.get(0).disconnect();
         }
         try
         {
@@ -116,7 +118,7 @@ public class Server extends Thread {
         {
             e.printStackTrace();
         }
-        this.interrupt();
+        this.shutdown = true;
     }
 
 }

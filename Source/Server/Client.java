@@ -4,16 +4,15 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 
-public class Client extends Thread {
+public class Client implements Runnable {
 
     // PRIVATE VARIABLES
     private final Core CORE;
     private Player PLAYER;
     private final Socket clientSocket;
     private OutputStream outputStream;
-    private InputStream inputStream;
     private BufferedReader reader;
-
+    volatile boolean shutdown = false;
     /*
     +----------------------------+
     | START / CREATION FUNCTIONS |
@@ -23,11 +22,13 @@ public class Client extends Thread {
         CORE = core;
         clientSocket = clientsocket;
     }
-    @Override
     public void run() {
         try
         {
-            clientLogin();
+            while(!shutdown)
+            {
+                clientLogin();
+            }
         }
         catch (IOException e)
         {
@@ -37,7 +38,7 @@ public class Client extends Thread {
     }
     private void clientLogin() throws IOException
     {
-        inputStream = clientSocket.getInputStream();
+        InputStream inputStream = clientSocket.getInputStream();
         outputStream = clientSocket.getOutputStream();
         reader = new BufferedReader(new InputStreamReader(inputStream));
         boolean loginStatus = false;
@@ -45,21 +46,15 @@ public class Client extends Thread {
         String username = "notSet";
         for(int i = 0; i < 3; i++)
         {
-            msgClient("+----------+");
-            msgClient("| Username |");
-            msgClient("+----------+");
+            alertClient("Username");
             tokens[0] = reader.readLine();
-            msgClient("+----------+");
-            msgClient("| Password |");
-            msgClient("+----------+");
+            alertClient("Password");
             tokens[1] = reader.readLine();
             loginStatus = CORE.SERVER.handleClientLogin(tokens);
             if(loginStatus)
             {
                 username = tokens[0];
-                msgClient("+---------------+");
-                msgClient("| Login Success |");
-                msgClient("+---------------+");
+                alertClient("Login Success");
                 break;
             }
             else
@@ -88,7 +83,15 @@ public class Client extends Thread {
     */
     public Player getPlayer() {return this.PLAYER;}
     public int getNumInput(int min, int max){
-        int intInput = Integer.parseInt(Objects.requireNonNull(getInput()));
+        int intInput;
+        try
+        {
+            intInput = Integer.parseInt(Objects.requireNonNull(getInput()));
+        }
+        catch(NumberFormatException nfe){
+            msgClient("BAD INPUT!");
+            intInput = getNumInput(min, max);
+        }
         if(intInput < min && intInput > max)
         {
             msgClient("BAD INPUT!");
@@ -111,6 +114,20 @@ public class Client extends Thread {
     | GENERAL PURPOSE FUNCTIONS |
     +---------------------------+
     */
+    public void alertClient(String msg)
+    {
+        int msgSize = msg.length();
+        int borderSize = msgSize + 2;
+
+        String border = "+" + "-".repeat(borderSize) + "+";
+        msg = "| " + msg + " |";
+
+        msgClient(border);
+        msgClient(msg);
+        msgClient(border);
+
+
+    }
     public void msgClient(String msg){try {outputStream.write( (msg +"\r\n").getBytes() );} catch (IOException e) {disconnect();}}
     private String getInput() {try {return reader.readLine();} catch (IOException e) {disconnect();} return null;}
 
@@ -125,6 +142,6 @@ public class Client extends Thread {
         {
             e.printStackTrace();
         }
-        this.interrupt();
+        this.shutdown = true;
     }
 }

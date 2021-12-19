@@ -6,18 +6,52 @@
       <sourceFolder url="file://$MODULE_DIR$/Source/Core" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Source/Database/MySQL" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Source/Database/Utilities" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Source/Game/Player" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Source/Launcher/Start" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Source/Server" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/GameClient/Client" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Source/Game/PlayGame" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/TestingStage/Test" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Locations/City" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Locations/Dungeon" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Locations/Town" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Locations/Wild" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Armor" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Armor/Chest" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Armor/Head" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Armor/Leg" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Consumables" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Consumables/Drink" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Consumables/Food" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Consumables/Potion" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Weapon" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Weapon/Axe" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Weapon/Bow" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Weapon/Staff" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Weapon/Sword" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Locations" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/World" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Archer" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Knight" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Mage" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Player" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Rogue" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Skills" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Skills/Archer" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Skills/Combat" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Skills/Gathering" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Skills/Knight" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Skills/Mage" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/Player/Skills/Rogue" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Weapon/Shield" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Locations/Dev" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Locations/PVP" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Locations/Zone" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="commons-lang3-3.11" level="project" />
-    <orderEntry type="library" name="mysql-connector-java-8.0.27" level="project" />
-    <orderEntry type="library" name="json-simple-1.1" level="project" />
-    <orderEntry type="library" name="gson-2.8.8" level="project" />
+    <orderEntry type="library" exported="" name="commons-lang3-3.11" level="project" />
+    <orderEntry type="library" exported="" name="mysql-connector-java-8.0.27" level="project" />
+    <orderEntry type="library" exported="" name="json-simple-1.1" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.8.8" level="project" />
   </component>
 </module>

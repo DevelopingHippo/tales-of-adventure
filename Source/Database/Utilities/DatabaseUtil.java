@@ -22,8 +22,7 @@ public class DatabaseUtil {
     // Query Database
     public ResultSet queryDatabase(String sql)
     {
-        Statement stmt = null;
-        ResultSet results = null;
+        Statement stmt;
         try
         {
             stmt = conn.createStatement();
@@ -94,7 +93,37 @@ public class DatabaseUtil {
         return false;
     }
 
+    public void createNewCharacter(String username, String characterName)
+    {
+        try
+        {
+            PreparedStatement createCharStmt = conn.prepareStatement("INSERT INTO playerCharacter(username, name) VALUES (?, ?)");
+            createCharStmt.setString(1, username);         // Username
+            createCharStmt.setString(2, characterName);    // CharacterName
+            createCharStmt.executeUpdate();
 
+            PreparedStatement createMageStmt = conn.prepareStatement("INSERT INTO mageSkill(name) VALUES (?)");
+            PreparedStatement createArcheryStmt = conn.prepareStatement("INSERT INTO archerSkill(name) VALUES (?)");
+            PreparedStatement createKnightStmt = conn.prepareStatement("INSERT INTO knightSkill(name) VALUES (?)");
+            PreparedStatement createRogueStmt = conn.prepareStatement("INSERT INTO rogueSkill(name) VALUES (?)");
+
+            createMageStmt.setString(1, characterName);
+            createArcheryStmt.setString(1, characterName);
+            createKnightStmt.setString(1, characterName);
+            createRogueStmt.setString(1, characterName);
+
+            createMageStmt.executeUpdate();
+            createArcheryStmt.executeUpdate();
+            createKnightStmt.executeUpdate();
+            createRogueStmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+    }
 
     // Login Hashing Function
     public String loginHash(String password)
@@ -112,15 +141,16 @@ public class DatabaseUtil {
         assert digest != null;
         byte[] encodedHash = digest.digest(password.getBytes());
         StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
-        for (byte hash : encodedHash) {
+        for (byte hash : encodedHash)
+        {
             String hex = Integer.toHexString(0xff & hash);
-            if (hex.length() == 1) {
+            if (hex.length() == 1)
+            {
                 hexString.append('0');
             }
             hexString.append(hex);
         }
         hashedPassword = hexString.toString();
-
         return hashedPassword;
     }
 

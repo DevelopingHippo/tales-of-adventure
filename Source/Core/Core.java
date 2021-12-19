@@ -1,10 +1,12 @@
-public class Core extends Thread {
+public class Core implements Runnable {
 
     // PUBLIC VARIABLES
     public Core CORE;
     public Server SERVER;
     public Database DATABASE;
     public Game GAME = new Game(this);
+    public World WORLD = new World(this);
+    volatile boolean shutdown = false;
 
     /*
     +----------------------------+
@@ -16,8 +18,8 @@ public class Core extends Thread {
         CORE = this;
         DATABASE = new Database(CORE);
         SERVER = new Server(1234, this);
-
-        this.start();
+        Thread coreThread = new Thread(this);
+        coreThread.start();
     }
     public void run()
     {
@@ -26,7 +28,8 @@ public class Core extends Thread {
     public void startCore()
     {
         DATABASE.Log("CORE is Starting" ,"system");
-        SERVER.start();
+        Thread serverThread = new Thread(SERVER);
+        serverThread.start();
     }
 
 
@@ -40,7 +43,7 @@ public class Core extends Thread {
     public void initiateShutdown()
     {
         DATABASE.shutdown();
-        SERVER.shutdown();
+        SERVER.serverShutdown();
         try
         {
             Thread.sleep(1000);
@@ -49,6 +52,5 @@ public class Core extends Thread {
         {
             e.printStackTrace();
         }
-        this.interrupt();
     }
 }

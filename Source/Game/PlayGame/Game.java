@@ -8,29 +8,16 @@ public class Game {
     }
 
 
-
-    public void startGame(Player PLAYER){
-
-        PLAYER.getClient().msgClient("Name: " + PLAYER.getPlayerInfo().getName());
-        PLAYER.getClient().msgClient("Level: " + PLAYER.getPlayerInfo().getLevel());
-        PLAYER.getClient().msgClient("Exp: " + PLAYER.getPlayerInfo().getExp());
-
-
-        while(true)
-        {
-            String input = PLAYER.getClient().getStringInput();
-            if(input.equalsIgnoreCase("quit"))
-            {
-                break;
-            }
-            else
-            {
-                System.out.println(input);
-            }
-        }
-
+    public void playIntro(Player PLAYER)
+    {
+        PLAYER.getClient().msgClient("Welcome To Tales of Adventure!");
+        PLAYER.getClient().msgClient("This is a Text-Based RPG with Client -> Server Communication");
+        PLAYER.getClient().msgClient("to allow for a connected World and Player Experience!");
+        PLAYER.getPlayerInfo().setWorldLocation("High Hrothgar");
     }
-
-
+    public void loadLocation(Player PLAYER)
+    {
+        CORE.WORLD.getLocation(PLAYER.getPlayerInfo().getWorldLocation()).playerJoin(PLAYER);
+    }
 
 }

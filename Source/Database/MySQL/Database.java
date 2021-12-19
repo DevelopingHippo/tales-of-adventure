@@ -1,8 +1,7 @@
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Database {
 
@@ -102,7 +101,6 @@ public class Database {
             }
         }
         Log(("Login Failed: " + username + " Does Not Exist"), "account");
-        System.out.println();
         return false;
     }
 
@@ -136,18 +134,28 @@ public class Database {
         return false;
     }
 
-    public boolean loadCharacterInfo(PlayerInfo playerInfo)
+
+
+
+
+    /*
+    +---------------------+
+    | CHARACTER FUNCTIONS |
+    +---------------------+
+    */
+
+    public void loadCharacterInfo(Player PLAYER)
     {
-        if(!utility.checkCharacterName(playerInfo.getName()))
+        if(utility.checkCharacterName(PLAYER.getPlayerInfo().getName()))
         {
-            ResultSet results = utility.queryDatabase("SELECT * FROM playerCharacter WHERE name = '" + playerInfo.getName() + "'");
+            ResultSet results = utility.queryDatabase("SELECT * FROM playerCharacter WHERE name = '" + PLAYER.getPlayerInfo().getName() + "'");
             try
             {
                 if(results.next())
                 {
-                    playerInfo.addLevel(Integer.parseInt(results.getString("level")));
-                    playerInfo.addExp(Integer.parseInt(results.getString("totExp")));
-                    return true;
+                    PLAYER.getPlayerInfo().addLevel(results.getInt("level"));
+                    PLAYER.getPlayerInfo().addExp(results.getInt("totExp"));
+                    PLAYER.getPlayerInfo().setWorldLocation(results.getString("worldLocation"));
                 }
             }
             catch (SQLException e)
@@ -157,14 +165,42 @@ public class Database {
                 System.out.println("VendorError: " + e.getErrorCode());
             }
         }
-        return false;
+    }
+
+    public void loadCharacterSkills(Player PLAYER)
+    {
+//        if(!utility.checkCharacterName(PLAYER.getPlayerInfo().getName()))
+//        {
+//            try
+//            {
+//                ResultSet archerResults = utility.queryDatabase("SELECT * FROM archerSkill WHERE name = '" + PLAYER.getPlayerInfo().getName() + "'");
+//                if(archerResults.next())
+//                {
+//                    PLAYER.getPlayerSkills().addArcherSkill();
+//                }
+//                ResultSet knightResults = utility.queryDatabase("SELECT * FROM knightSkill WHERE name = '" + PLAYER.getPlayerInfo().getName() + "'");
+//                if(knightResults.next())
+//                {
+//                    PLAYER.getPlayerSkills().addKnightSkill();
+//                }
+//                ResultSet mageResults = utility.queryDatabase("SELECT * FROM mageSkill WHERE name = '" + PLAYER.getPlayerInfo().getName() + "'");
+//                if(mageResults.next())
+//                {
+//                    PLAYER.getPlayerSkills().addMageSkill();
+//                }
+//            }
+//            catch (SQLException e)
+//            {
+//                System.out.println("SQLException: " + e.getMessage());
+//                System.out.println("SQLState: " + e.getSQLState());
+//                System.out.println("VendorError: " + e.getErrorCode());
+//            }
+//        }
     }
 
     public void createNewCharacter(Player PLAYER)
     {
-        PLAYER.getClient().msgClient("+---------------+");
-        PLAYER.getClient().msgClient("| New Character |");
-        PLAYER.getClient().msgClient("+---------------+");
+        PLAYER.getClient().alertClient("New Character");
         PLAYER.getClient().msgClient("Name: ");
         String characterName = PLAYER.getClient().getStringInput();
 
@@ -175,14 +211,19 @@ public class Database {
             PLAYER.getClient().msgClient("Name: ");
             characterName = PLAYER.getClient().getStringInput();
         }
+        utility.createNewCharacter(PLAYER.getUsername(), characterName);
+        PLAYER.getPlayerInfo().setName(characterName);
+    }
+
+    public LinkedList<String> getCharacterList(String username)
+    {
+        ResultSet results = utility.queryDatabase("SELECT name, level FROM playerCharacter WHERE username='" + username + "'");
+        LinkedList<String> characterList = new LinkedList<>();
         try
         {
-            PreparedStatement createCharStmt = conn.prepareStatement("INSERT INTO playerCharacter VALUES (?, ?, ?, ?)");
-            createCharStmt.setString(1, PLAYER.getUsername());
-            createCharStmt.setString(2, characterName);
-            createCharStmt.setString(3, "0");
-            createCharStmt.setString(4, "0");
-            createCharStmt.executeUpdate();
+            while (results.next()) {
+                characterList.add(results.getString("name"));
+            }
         }
         catch (SQLException e)
         {
@@ -190,30 +231,27 @@ public class Database {
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
-        PLAYER.getPlayerInfo().setName(characterName);
-        loadCharacterInfo(PLAYER.getPlayerInfo());
-    }
-
-    public ArrayList<String> getCharacterList(String username)
-    {
-        ResultSet results = utility.queryDatabase("SELECT name, level FROM playerCharacter WHERE username='" + username + "'");
-        ArrayList<String> characterList = new ArrayList<>();
-        while (true)
-        {
-            try
-            {
-                if (!results.next()) break;
-                characterList.add(results.getString("name"));
-            }
-            catch (SQLException e)
-            {
-                System.out.println("SQLException: " + e.getMessage());
-                System.out.println("SQLState: " + e.getSQLState());
-                System.out.println("VendorError: " + e.getErrorCode());
-            }
-        }
         return characterList;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    +------------------+
+    | SYSTEM FUNCTIONS |
+    +------------------+
+    */
 
     // Insert Log into Database
     public void Log(String logMessage, String type)
@@ -289,6 +327,4 @@ public class Database {
             e.printStackTrace();
         }
     }
-
-
 }

@@ -20,7 +20,7 @@ public class Launcher {
                 e.printStackTrace();
             }
         }
-        System.out.println("+----------+");
+        System.out.println("\n+----------+");
         System.out.println("| SHUTDOWN |");
         System.out.println("+----------+");
     }
