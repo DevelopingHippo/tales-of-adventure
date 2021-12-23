@@ -9,9 +9,9 @@ public class Player {
     private final PlayerAction playerAction = new PlayerAction(this);
     private final PlayerSkills playerSkills = new PlayerSkills(this);
 
-
-
-
+    private Battle activeBattle;
+    private boolean inBattle = false;
+    public boolean currentlyPlaying = true;
 
 
 
@@ -30,14 +30,18 @@ public class Player {
     public void startPlayer()
     {
         utility.loadCharacter(this);
-
-        if(playerInfo.getWorldLocation().equalsIgnoreCase("Intro"))
-        {
-            CORE.GAME.playIntro(this);
-        }
-        CORE.GAME.loadLocation(this);
+        CORE.GAME.StartGame(this);
     }
 
+
+    public void sleep(int time)
+    {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     /*
@@ -51,7 +55,7 @@ public class Player {
     public PlayerInfo getPlayerInfo(){return this.playerInfo;}
     public PlayerSkills getPlayerSkills(){return this.playerSkills;}
     public PlayerAction getPlayerAction(){return this.playerAction;}
-
+    public Battle getActiveBattle(){return this.activeBattle;}
 
     /*
     +---------------------------+
@@ -67,6 +71,51 @@ public class Player {
         this.playerInfo.removeStamina(staminaUsed);
     }
 
+
+    public void useItem(Item item)
+    {
+        playerInfo.getPlayerLoot().remove(item);
+    }
+
+
+    public void startBattle(Battle currentBattle)
+    {
+        this.inBattle = true;
+        this.activeBattle = currentBattle;
+        while(true)
+        {
+            if(!this.activeBattle.getBattleState() || !this.inBattle)
+            {
+                break;
+            }
+            else
+            {
+                sleep(1000);
+            }
+        }
+        this.activeBattle = null;
+
+        if(playerInfo.getHealth() <= 0)
+        {
+            die();
+        }
+
+    }
+
+    public void leaveBattle()
+    {
+        this.inBattle = false;
+    }
+
+    public void die()
+    {
+        CLIENT.alertClient("YOU HAVE DIED!");
+        sleep(5000);
+        playerInfo.respawnPlayer();
+        CORE.WORLD.getLocation(playerInfo.getWorldLocation()).playerLeave(this);
+        playerInfo.setWorldLocation("Intro");
+        CORE.GAME.loadLocation(this);
+    }
 
 
 }

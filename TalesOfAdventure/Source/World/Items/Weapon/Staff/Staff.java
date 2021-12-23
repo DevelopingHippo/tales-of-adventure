@@ -1,4 +1,4 @@
-public class Staff extends Item implements Weapon {
+public class Staff extends Weapon {
 
     public Staff(String name){
         itemType = "staff";
@@ -16,5 +16,6 @@ class FireStaff extends Staff {
 
     public FireStaff() {
         super("Fire Staff");
+        dmg = 5;
     }
 }

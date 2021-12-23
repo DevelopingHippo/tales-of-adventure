@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Location {
@@ -6,11 +7,18 @@ public abstract class Location {
     public final String locationName;
     public final Core CORE;
     public final HashMap<String, Player> playersInLocation = new HashMap<>();
+    public HashMap<String, Area> areaMap = new HashMap<>();
+
+    public HashMap<Player, Area> playerLoadedArea = new HashMap<>();
+    public HashMap<Npc, Area> npcLoadedArea = new HashMap<>();
+    public HashMap<Creature, Area> creatureLoadedArea = new HashMap<>();
+
 
     protected Location(String locationtype, String locationname, Core core) {
+
         this.locationType = locationtype;
         this.locationName = locationname;
-        CORE = core;
+        this.CORE = core;
     }
 
     public void playerJoin(Player PLAYER)
@@ -23,7 +31,6 @@ public abstract class Location {
     {
         playersInLocation.remove(PLAYER.getUsername());
     }
-
 
     private void startLocation(Player PLAYER)
     {

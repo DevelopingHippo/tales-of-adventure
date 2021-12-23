@@ -43,6 +43,22 @@
       <sourceFolder url="file://$MODULE_DIR$/Source/World/Creatures/Boss" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Source/World/Creatures/Minion" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Source/Game/GameMechanics/FightFramework" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting/RawMaterial" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting/RawMaterial/Cooking" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting/RawMaterial/Cooking/RawMeat" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting/RawMaterial/Fur" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting/RawMaterial/Gathering" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting/RawMaterial/Gathering/Ore" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting/ReadyMaterial" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting/ReadyMaterial/Smithing" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Crafting/ReadyMaterial/Smithing/Ingot" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Items/Currency" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Npc" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Npc/Guard" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Npc/Merchant" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Npc/QuestGiver" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Source/World/Npc/Teacher" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -4,8 +4,8 @@ public class Core implements Runnable {
     public Core CORE;
     public Server SERVER;
     public Database DATABASE;
-    public Game GAME = new Game(this);
-    public World WORLD = new World(this);
+    public final Game GAME = new Game(this);
+    public final World WORLD = new World(this);
     volatile boolean shutdown = false;
 
     /*

@@ -1,4 +1,4 @@
-public class Shield extends Item implements Weapon {
+public class Shield extends Weapon {
 
     public Shield(String name){
         itemType = "staff";
@@ -12,9 +12,10 @@ public class Shield extends Item implements Weapon {
 
 
 
-class WoodenShield extends Staff {
+class WoodenShield extends Shield {
 
     public WoodenShield() {
         super("Wooden Shield");
+        dmg = 2;
     }
 }

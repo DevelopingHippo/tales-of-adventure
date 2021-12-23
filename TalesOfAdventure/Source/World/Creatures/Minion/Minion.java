@@ -1,6 +1,7 @@
-public class Minion extends Creature implements MinionActions {
-    protected Minion(String creaturename) {super("minion", creaturename);}
+import java.util.concurrent.ThreadLocalRandom;
 
+public abstract class Minion extends Creature implements MinionActions {
+    protected Minion(String creaturename) {super("minion", creaturename);}
 
 
     @Override
@@ -18,6 +19,13 @@ class Skeleton extends Minion
         health = 25;
         stamina = 10;
         damage = 5;
+        exp = 10;
+    }
+
+    @Override
+    public void createCreatureLoot()
+    {
+        creatureLoot.add(new GoldCoins(ThreadLocalRandom.current().nextInt(0, 10)));
     }
 }
 
@@ -29,5 +37,12 @@ class Goblin extends Minion
         health = 35;
         stamina = 10;
         damage = 5;
+        exp = 15;
+    }
+
+    @Override
+    public void createCreatureLoot()
+    {
+        creatureLoot.add(new GoldCoins(ThreadLocalRandom.current().nextInt(0, 10)));
     }
 }

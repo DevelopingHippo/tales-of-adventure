@@ -3,12 +3,27 @@ public class City extends Location {
 
 }
 
-class HighHrothgar extends City
+class HighHrothgar extends City implements Runnable
 {
     public HighHrothgar(Core core) {super("High Hrothgar", core);}
+    @Override
+    public void run()
+    {
+        manageHHrothgar();
+    }
+
+    private void manageHHrothgar()
+    {
+
+    }
+
+
+
 
     public void playHighHrothgar(Player PLAYER)
     {
 
     }
+
+
 }

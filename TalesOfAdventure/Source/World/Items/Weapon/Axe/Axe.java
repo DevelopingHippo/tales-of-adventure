@@ -1,4 +1,4 @@
-public class Axe extends Item implements Weapon {
+public class Axe extends Weapon {
     public Axe(String name)
     {
         itemType = "axe";
@@ -11,5 +11,6 @@ class BronzeAxe extends Axe {
     public BronzeAxe()
     {
         super("Bronze Axe");
+        dmg = 5;
     }
 }

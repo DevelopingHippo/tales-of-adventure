@@ -1,4 +1,4 @@
-public class Boss extends Creature implements BossActions {
+public abstract class Boss extends Creature implements BossActions {
 
     protected Boss(String creaturename) {super("boss", creaturename);}
 
@@ -16,6 +16,13 @@ class GaryTheSkeletonKnight extends Boss
         super("garytheskeletonknight");
         health = 75;
         stamina = 45;
+        damage = 25;
+        exp = 150;
     }
 
+    @Override
+    public void createCreatureLoot()
+    {
+
+    }
 }

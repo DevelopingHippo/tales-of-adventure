@@ -1,24 +1,29 @@
+import java.util.ArrayList;
+import java.util.Collection;
+
 public abstract class Creature {
 
     public final String creatureType;
     public final String creatureName;
+    public final ArrayList<Item> creatureLoot = new ArrayList<>();
 
     private Battle currentBattle;
     private boolean battleState = false;
 
-
+    public int exp;
     public int health = 1;
     public int stamina = 1;
     public int damage = 1;
 
-
+    public abstract void createCreatureLoot();
     protected Creature(String creaturetype, String creaturename)
     {
         this.creatureType = creaturetype;
         this.creatureName = creaturename;
+        createCreatureLoot();
     }
 
-    public void battle(Player PLAYER)
+    public Battle battle(Player PLAYER)
     {
         if(!this.battleState)
         {
@@ -29,6 +34,7 @@ public abstract class Creature {
         {
             currentBattle.playerJoinBattle(PLAYER);
         }
+        return this.currentBattle;
     }
     public void joinBattle(Creature joinCreature)
     {
@@ -37,7 +43,17 @@ public abstract class Creature {
         this.currentBattle.creatureJoinBattle(joinCreature);
     }
 
+    public void leaveBattle()
+    {
+        this.currentBattle = null;
+    }
+
     public void takeDamage(int attackDmg) {this.health = this.health - attackDmg;}
 
     public abstract void attack(Player PLAYER);
+
+    public ArrayList<Item> getLoot()
+    {
+        return creatureLoot;
+    }
 }

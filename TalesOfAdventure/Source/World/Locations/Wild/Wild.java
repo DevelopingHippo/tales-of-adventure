@@ -6,16 +6,27 @@ public class Wild extends Location {
     }
 }
 
-class Forest extends Wild
+class Forest extends Wild implements Runnable
 {
     public Forest(Core core)
     {
         super("Forest", core);
+    }
+    @Override
+    public void run()
+    {
+        manageForest();
+    }
+
+    private void manageForest()
+    {
+
     }
 
     public void playForest(Player PLAYER)
     {
 
     }
+
 
 }

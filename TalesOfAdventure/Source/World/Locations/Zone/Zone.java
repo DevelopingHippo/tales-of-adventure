@@ -9,30 +9,34 @@ class Intro extends Zone
 
     public void playIntro(Player PLAYER)
     {
-        Skeleton skeleton1 = new Skeleton();
 
-        skeleton1.battle(PLAYER);
+        PLAYER.getClient().msgClient("Welcome To Tales of Adventure!");
+        PLAYER.getClient().msgClient("This is a Text-Based RPG with Client -> Server Communication");
+        PLAYER.getClient().msgClient("to allow for a connected World and Player Experience!");
+        PLAYER.sleep(2000);
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Skeleton skeleton2 = new Skeleton();
+        PLAYER.getClient().msgClient("Your first lesson will be learning how to battle monsters.");
+        PLAYER.sleep(2000);
+
+        Skeleton skeleton = new Skeleton();
+        PLAYER.startBattle(skeleton.battle(PLAYER));
+
+        PLAYER.getClient().msgClient("Congrats! You have defeated your first Monster.");
+        PLAYER.getClient().msgClient("However, now your health is low, and another Monster is on its way!");
+
+        PLAYER.sleep(2000);
+
+        PLAYER.getClient().msgClient("Quick, here's a HEALTH POTION, try and use it in the battle!");
+        PLAYER.getPlayerInfo().addLootItem(new SmallHealthPotion());
+
+        PLAYER.sleep(1000);
+
         Goblin goblin = new Goblin();
-        Rabbit rabbit = new Rabbit();
-        Wolf wolf = new Wolf();
-
-        skeleton1.joinBattle(goblin);
-        skeleton1.joinBattle(skeleton2);
-        skeleton1.joinBattle(rabbit);
-        skeleton1.joinBattle(wolf);
+        PLAYER.startBattle(goblin.battle(PLAYER));
 
 
-        while(true)
-        {
+        PLAYER.getPlayerInfo().setWorldLocation("Old Riften");
 
-        }
     }
 
 }

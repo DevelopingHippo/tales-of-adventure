@@ -1,9 +1,10 @@
-public class Chest extends Item implements Armor {
+public abstract class Chest extends Armor {
 
     public Chest(String name)
     {
         itemType = "chest";
         itemName = name;
+        battleItem = false;
     }
 }
 
@@ -13,4 +14,6 @@ class LeatherVest extends Chest {
     {
         super("Leather Vest");
     }
+
+
 }

@@ -1,16 +1,26 @@
-public class PlayerInfo {
+import java.util.ArrayList;
+import java.util.Collection;
 
+public class PlayerInfo {
+    // Player Important Stats
     private String Name = "Not Loaded";
     private int Level = 0;
     private int Exp = 0;
     private String worldLocation;
 
-
-    private int health = 20;
+    // Player Stats
+    private int health = 50;
     private int stamina = 20;
+    private int maxHealth = 50;
+    private int maxStamina = 20;
 
-    //Item Containers
 
+    // Item Containers
+    private int goldAmount = 0;
+    private final ArrayList<Item> playerLoot = new ArrayList<>();
+    private final ArrayList<Item> activeItems = new ArrayList<>();
+    private final ArrayList<Item> passiveItem = new ArrayList<>();
+    private Weapon currentWeapon = new LongSword();
 
     /*
     +------------------+
@@ -23,7 +33,8 @@ public class PlayerInfo {
     public String getWorldLocation(){return this.worldLocation;}
     public int getHealth(){return this.health;}
     public int getStamina(){return this.stamina;}
-
+    public int getGoldAmount(){return this.goldAmount;}
+    public ArrayList<Item> getPlayerLoot(){return this.playerLoot;}
 
     /*
     +------------------+
@@ -36,12 +47,57 @@ public class PlayerInfo {
     public void addExp(int expIncrease){this.Exp = this.Exp + expIncrease;}
     public void removeHealth(int damageTaken){this.health = this.health - damageTaken;}
     public void removeStamina(int staminaUsed){this.stamina = this.stamina - staminaUsed;}
+    public void addLootItem(Item newItem)
+    {
+        if(newItem instanceof GoldCoins)
+        {
+            GoldCoins coins = (GoldCoins)newItem;
+            goldAmount = goldAmount + coins.goldAmount;
+        }
+        else if(newItem.battleItem)
+        {
+            this.playerLoot.add(newItem);
+            this.activeItems.add(newItem);
+        }
+    }
 
+    public void addHealth(int healthAdd)
+    {
+        health = health + healthAdd;
+        if(health > maxHealth)
+        {
+            health = maxHealth;
+        }
+    }
+    public void addStamina(int staminaAdd)
+    {
+        stamina = stamina + staminaAdd;
+        if(stamina > maxStamina)
+        {
+            stamina = maxStamina;
+        }
+    }
 
+    public int getDamage()
+    {
+        return currentWeapon.dmg;
+    }
 
+    public void respawnPlayer()
+    {
+        this.health = this.maxHealth;
+        this.stamina = this.maxStamina;
+    }
 
+    public ArrayList<Item> getActiveItems()
+    {
+        return this.activeItems;
+    }
 
-
-
-
+    public void removeItem(Item item)
+    {
+        passiveItem.remove(item);
+        activeItems.remove(item);
+        playerLoot.remove(item);
+    }
 }

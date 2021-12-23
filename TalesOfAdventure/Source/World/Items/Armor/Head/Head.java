@@ -1,9 +1,10 @@
-public class Head extends Item implements Armor {
+public class Head extends Armor {
 
     public Head(String name)
     {
         itemType = "head";
         itemName = name;
+        battleItem = false;
     }
 }
 
