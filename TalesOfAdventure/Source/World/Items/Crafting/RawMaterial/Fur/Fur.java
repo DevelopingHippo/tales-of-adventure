@@ -1,6 +1,7 @@
 public abstract class Fur extends Item {
-    public Fur(String name)
+    public Fur(String name, Core core)
     {
+        super(core);
         itemType = "fur";
         itemName = name;
     }
@@ -15,8 +16,8 @@ public abstract class Fur extends Item {
 
 class WolfFur extends Fur
 {
-    public WolfFur()
+    public WolfFur(Core core)
     {
-        super("Wolf Fur");
+        super("Wolf Fur", core);
     }
 }

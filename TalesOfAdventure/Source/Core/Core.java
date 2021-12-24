@@ -16,6 +16,7 @@ public class Core implements Runnable {
     public Core()
     {
         CORE = this;
+        WORLD.buildWorld();
         DATABASE = new Database(CORE);
         SERVER = new Server(1234, this);
         Thread coreThread = new Thread(this);

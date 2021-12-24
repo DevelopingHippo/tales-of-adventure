@@ -1,11 +1,16 @@
 import java.util.ArrayList;
-import java.util.Collection;
 
 public abstract class Creature {
 
+    public Core CORE;
+    public Area inArea;
+
+    public final String uniqueID;
     public final String creatureType;
     public final String creatureName;
     public final ArrayList<Item> creatureLoot = new ArrayList<>();
+
+
 
     private Battle currentBattle;
     private boolean battleState = false;
@@ -16,12 +21,25 @@ public abstract class Creature {
     public int damage = 1;
 
     public abstract void createCreatureLoot();
-    protected Creature(String creaturetype, String creaturename)
+    protected Creature(String creaturetype, String creaturename, Core core)
     {
+        this.CORE = core;
+        this.uniqueID = this.CORE.WORLD.cardinal.generateID("creature");
         this.creatureType = creaturetype;
         this.creatureName = creaturename;
+        this.CORE.WORLD.creatureCreateBuffer.put(uniqueID, this);
+        this.CORE.WORLD.creatureLoadedArea.put(uniqueID, null);
         createCreatureLoot();
     }
+
+
+
+
+
+
+
+
+
 
     public Battle battle(Player PLAYER)
     {
@@ -51,6 +69,12 @@ public abstract class Creature {
     public void takeDamage(int attackDmg) {this.health = this.health - attackDmg;}
 
     public abstract void attack(Player PLAYER);
+
+    public void die()
+    {
+        CORE.WORLD.removeCreature(this);
+    }
+
 
     public ArrayList<Item> getLoot()
     {

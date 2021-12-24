@@ -1,7 +1,8 @@
 public abstract class Chest extends Armor {
 
-    public Chest(String name)
+    public Chest(String name, Core core)
     {
+        super(core);
         itemType = "chest";
         itemName = name;
         battleItem = false;
@@ -10,9 +11,9 @@ public abstract class Chest extends Armor {
 
 
 class LeatherVest extends Chest {
-    public LeatherVest()
+    public LeatherVest(Core core)
     {
-        super("Leather Vest");
+        super("Leather Vest", core);
     }
 
 

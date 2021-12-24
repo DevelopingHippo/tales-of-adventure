@@ -1,7 +1,8 @@
 public class Food extends Consumable {
 
-    public Food(String name)
+    public Food(String name, Core core)
     {
+        super(core);
         itemType = "food";
         itemName = name;
         battleItem = false;
@@ -10,8 +11,8 @@ public class Food extends Consumable {
 
 class RoastedDeer extends Food
 {
-    public RoastedDeer()
+    public RoastedDeer(Core core)
     {
-        super("Roasted Deer");
+        super("Roasted Deer", core);
     }
 }

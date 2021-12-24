@@ -1,7 +1,8 @@
 public abstract class RawMeat extends Cooking {
 
-    public RawMeat(String name)
+    public RawMeat(String name, Core core)
     {
+        super(core);
         itemType = "meat";
         itemName = name;
     }
@@ -12,15 +13,15 @@ public abstract class RawMeat extends Cooking {
 
 
 class RawRabbit extends RawMeat {
-    public RawRabbit() {
-        super("Raw Rabbit");
+    public RawRabbit(Core core) {
+        super("Raw Rabbit", core);
     }
 }
 
 
 class RawVenison extends RawMeat {
-    public RawVenison() {
-        super("Raw Venison");
+    public RawVenison(Core core) {
+        super("Raw Venison", core);
     }
 
 }

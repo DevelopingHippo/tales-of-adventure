@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class PlayerInfo {
     // Player Important Stats
@@ -7,7 +6,8 @@ public class PlayerInfo {
     private int Level = 0;
     private int Exp = 0;
     private String worldLocation;
-
+    private Location loadedLocation;
+    private Area loadedArea;
     // Player Stats
     private int health = 50;
     private int stamina = 20;
@@ -20,7 +20,7 @@ public class PlayerInfo {
     private final ArrayList<Item> playerLoot = new ArrayList<>();
     private final ArrayList<Item> activeItems = new ArrayList<>();
     private final ArrayList<Item> passiveItem = new ArrayList<>();
-    private Weapon currentWeapon = new LongSword();
+    private Weapon currentWeapon;
 
     /*
     +------------------+
@@ -31,17 +31,20 @@ public class PlayerInfo {
     public int getLevel(){return this.Level;}
     public int getExp(){return this.Exp;}
     public String getWorldLocation(){return this.worldLocation;}
+    public Area getLoadedArea(){return this.loadedArea;}
     public int getHealth(){return this.health;}
     public int getStamina(){return this.stamina;}
     public int getGoldAmount(){return this.goldAmount;}
     public ArrayList<Item> getPlayerLoot(){return this.playerLoot;}
-
+    public Location getLoadedLocation(){return this.loadedLocation;}
     /*
     +------------------+
     | SETTER FUNCTIONS |
     +------------------+
     */
     public void setWorldLocation(String location){this.worldLocation = location;}
+    public void setLoadedLocation(Location location){this.loadedLocation = location;}
+    public void setLoadedArea(Area area){this.loadedArea = area;}
     public void setName(String characterName){this.Name = characterName;}
     public void addLevel(int levelIncrease){this.Level = this.Level + levelIncrease;}
     public void addExp(int expIncrease){this.Exp = this.Exp + expIncrease;}
@@ -99,5 +102,9 @@ public class PlayerInfo {
         passiveItem.remove(item);
         activeItems.remove(item);
         playerLoot.remove(item);
+    }
+
+    public void setCurrentWeapon(Weapon weapon) {
+        this.currentWeapon = weapon;
     }
 }

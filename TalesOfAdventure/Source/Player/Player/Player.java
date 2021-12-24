@@ -29,11 +29,20 @@ public class Player {
     }
     public void startPlayer()
     {
+        playerInfo.setCurrentWeapon(new Fist(CORE));
         utility.loadCharacter(this);
+        CORE.WORLD.playersInWorld.add(this);
+        CORE.WORLD.playerLoadedArea.put(this, null);
+        CORE.WORLD.playerLoadedLocation.put(this, null);
+        playerInfo.setWorldLocation("Old Riften");
         CORE.GAME.StartGame(this);
     }
 
 
+    public void printNext()
+    {
+        CLIENT.getStringInput();
+    }
     public void sleep(int time)
     {
         try {
@@ -99,7 +108,6 @@ public class Player {
         {
             die();
         }
-
     }
 
     public void leaveBattle()
@@ -112,10 +120,14 @@ public class Player {
         CLIENT.alertClient("YOU HAVE DIED!");
         sleep(5000);
         playerInfo.respawnPlayer();
-        CORE.WORLD.getLocation(playerInfo.getWorldLocation()).playerLeave(this);
         playerInfo.setWorldLocation("Intro");
         CORE.GAME.loadLocation(this);
     }
 
 
+    public void interact(Player player)
+    {
+        player.getClient().msgClient(this.getPlayerInfo().getName() + " | HP:" + this.playerInfo.getHealth() + " | LEVEL:" + this.playerInfo.getLevel());
+        // MUCH MORE TO DO, THIS IS FOR WHEN A PLAYER INTERACTS WITH ANOTHER PLAYER IN AN AREA
+    }
 }

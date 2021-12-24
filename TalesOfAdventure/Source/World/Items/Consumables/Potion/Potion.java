@@ -1,6 +1,7 @@
 public class Potion extends Consumable {
 
-    public Potion(String name) {
+    public Potion(String name, Core core) {
+        super(core);
         itemType = "potion";
         itemName = name;
         battleItem = true;
@@ -9,9 +10,9 @@ public class Potion extends Consumable {
 
 class SmallHealthPotion extends Potion
 {
-    public SmallHealthPotion()
+    public SmallHealthPotion(Core core)
     {
-        super("Small Health Potion");
+        super("Small Health Potion", core);
         ishealthReplenish = true;
         healthReplenish = 10;
     }
@@ -19,9 +20,9 @@ class SmallHealthPotion extends Potion
 
 class SmallStaminaPotion extends Potion
 {
-    public SmallStaminaPotion()
+    public SmallStaminaPotion(Core core)
     {
-        super("Small Stamina Potion");
+        super("Small Stamina Potion", core);
         isstaminaReplenish = true;
         staminaReplenish = 10;
     }

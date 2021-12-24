@@ -1,7 +1,8 @@
 public class Bow extends Weapon {
 
-    public Bow(String name)
+    public Bow(String name, Core core)
     {
+        super(core);
         itemType = "bow";
         itemName = name;
     }
@@ -10,9 +11,9 @@ public class Bow extends Weapon {
 
 class LongBow extends Bow
 {
-    public LongBow()
+    public LongBow(Core core)
     {
-        super("Long Bow");
+        super("Long Bow", core);
         dmg = 5;
     }
 }

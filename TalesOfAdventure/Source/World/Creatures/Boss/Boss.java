@@ -1,6 +1,6 @@
-public abstract class Boss extends Creature implements BossActions {
+public abstract class Boss extends Creature {
 
-    protected Boss(String creaturename) {super("boss", creaturename);}
+    protected Boss(String creaturename, Core core) {super("boss", creaturename, core);}
 
     @Override
     public void attack(Player PLAYER) {
@@ -11,9 +11,10 @@ public abstract class Boss extends Creature implements BossActions {
 
 class GaryTheSkeletonKnight extends Boss
 {
-    public GaryTheSkeletonKnight()
+    public GaryTheSkeletonKnight(Area area, Core core)
     {
-        super("garytheskeletonknight");
+        super("garytheskeletonknight", core);
+        inArea = area;
         health = 75;
         stamina = 45;
         damage = 25;

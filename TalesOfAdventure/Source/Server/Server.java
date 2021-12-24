@@ -95,7 +95,18 @@ public class Server implements Runnable {
                 String loginUser = loginTokens[0];
                 String loginPass = CORE.DATABASE.hashPassword(loginTokens[1]);
                 CORE.DATABASE.Log("SERVER: Handling Login " + loginUser, "server");
-                return CORE.DATABASE.userAuthentication(loginUser, loginPass);
+
+                if(CORE.DATABASE.userAuthentication(loginUser, loginPass))
+                {
+                    for(Client otherClients : clients)
+                    {
+                        if(loginUser.equalsIgnoreCase(otherClients.getPlayer().getUsername()))
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
             }
         }
         return false;

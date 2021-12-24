@@ -1,5 +1,7 @@
 public class City extends Location {
-    protected City(String name, Core core){super("city", name, core);}
+    protected City(String name, Core core){
+        super("city", name, core);
+    }
 
 }
 

@@ -1,7 +1,8 @@
 public class Leg extends Armor {
 
-    public Leg(String name)
+    public Leg(String name, Core core)
     {
+        super(core);
         itemType = "leg";
         itemName = name;
         battleItem = false;
@@ -10,8 +11,8 @@ public class Leg extends Armor {
 
 class LeatherPants extends Leg
 {
-    public LeatherPants()
+    public LeatherPants(Core core)
     {
-        super("Leather Pants");
+        super("Leather Pants", core);
     }
 }

@@ -13,7 +13,10 @@ public abstract class Consumable extends Item {
     public boolean isstaminaBoost;
     public int staminaBoost;
 
-
+    public Consumable(Core core)
+    {
+        super(core);
+    }
 
 
     @Override

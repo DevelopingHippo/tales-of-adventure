@@ -1,7 +1,8 @@
 public class Drink extends Consumable {
 
-    public Drink(String name)
+    public Drink(String name, Core core)
     {
+        super(core);
         itemType = "drink";
         itemName = name;
         battleItem = false;
@@ -10,7 +11,7 @@ public class Drink extends Consumable {
 
 class HoneyDew extends Drink
 {
-    public HoneyDew(){
-        super("Honey Dew");
+    public HoneyDew(Core core){
+        super("Honey Dew", core);
     }
 }

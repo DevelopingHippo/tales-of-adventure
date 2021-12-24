@@ -1,7 +1,7 @@
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Animal extends Creature implements AnimalActions {
-    protected Animal(String creaturename) {super("animal", creaturename);}
+public abstract class Animal extends Creature {
+    protected Animal(String creaturename, Core core) {super("animal", creaturename, core);}
 
 
     @Override
@@ -19,9 +19,10 @@ public abstract class Animal extends Creature implements AnimalActions {
 
 class Rabbit extends Animal
 {
-    public Rabbit()
+    public Rabbit(Area area, Core core)
     {
-        super("rabbit");
+        super("rabbit", core);
+        inArea = area;
         health = 10;
         stamina = 15;
         damage = 2;
@@ -33,7 +34,7 @@ class Rabbit extends Animal
     {
         for(int i = 0; i < ThreadLocalRandom.current().nextInt(0, 3); i++)
         {
-            creatureLoot.add(new RawRabbit());
+            creatureLoot.add(new RawRabbit(CORE));
         }
     }
 }
@@ -43,9 +44,10 @@ class Rabbit extends Animal
 
 class Wolf extends Animal
 {
-    public Wolf()
+    public Wolf(Area area, Core core)
     {
-        super("wolf");
+        super("wolf", core);
+        inArea = area;
         health = 10;
         stamina = 15;
         damage = 5;
@@ -57,7 +59,7 @@ class Wolf extends Animal
     {
         for(int i = 0; i < ThreadLocalRandom.current().nextInt(0, 3); i++)
         {
-            creatureLoot.add(new WolfFur());
+            creatureLoot.add(new WolfFur(CORE));
         }
     }
 }
@@ -67,9 +69,10 @@ class Wolf extends Animal
 
 class Deer extends Animal
 {
-    public Deer()
+    public Deer(Area area, Core core)
     {
-        super("deer");
+        super("deer", core);
+        inArea = area;
         health = 5;
         stamina = 20;
         damage = 3;
@@ -81,7 +84,7 @@ class Deer extends Animal
     {
         for(int i = 0; i < ThreadLocalRandom.current().nextInt(0, 3); i++)
         {
-            creatureLoot.add(new RawVenison());
+            creatureLoot.add(new RawVenison(CORE));
         }
     }
 }

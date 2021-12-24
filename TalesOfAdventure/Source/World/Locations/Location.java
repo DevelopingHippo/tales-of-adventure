@@ -1,17 +1,8 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public abstract class Location {
 
     public final String locationType;
     public final String locationName;
     public final Core CORE;
-    public final HashMap<String, Player> playersInLocation = new HashMap<>();
-    public HashMap<String, Area> areaMap = new HashMap<>();
-
-    public HashMap<Player, Area> playerLoadedArea = new HashMap<>();
-    public HashMap<Npc, Area> npcLoadedArea = new HashMap<>();
-    public HashMap<Creature, Area> creatureLoadedArea = new HashMap<>();
 
 
     protected Location(String locationtype, String locationname, Core core) {
@@ -19,17 +10,14 @@ public abstract class Location {
         this.locationType = locationtype;
         this.locationName = locationname;
         this.CORE = core;
+        this.CORE.WORLD.nameToLocation.put(this.locationName, this);
     }
 
     public void playerJoin(Player PLAYER)
     {
-        playersInLocation.put(PLAYER.getUsername(), PLAYER);
         PLAYER.getClient().alertClient("Entering " + locationName);
+        PLAYER.getPlayerInfo().setLoadedLocation(this);
         startLocation(PLAYER);
-    }
-    public void playerLeave(Player PLAYER)
-    {
-        playersInLocation.remove(PLAYER.getUsername());
     }
 
     private void startLocation(Player PLAYER)

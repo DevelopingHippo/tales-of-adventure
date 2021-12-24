@@ -8,14 +8,13 @@ public class Game {
     }
 
 
+
     public void StartGame(Player PLAYER)
     {
-
         while(PLAYER.currentlyPlaying)
         {
             CORE.WORLD.getLocation(PLAYER.getPlayerInfo().getWorldLocation()).playerJoin(PLAYER);
         }
-
     }
 
     public void loadLocation(Player PLAYER)

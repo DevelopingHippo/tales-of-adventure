@@ -67,7 +67,12 @@ public class Battle implements Runnable {
     public void playerJoinBattle(Player newPlayer)
     {
         playersJoining.put(newPlayer.getPlayerInfo().getName(), newPlayer);
-        String allCreatures = creatureNames.toString().replaceAll("\\[", "").replaceAll("]","").replaceAll("\\{", "").replaceAll("}", "");
+        StringBuilder allCreatures = new StringBuilder();
+        for(Creature creature : creaturesInBattle.values())
+        {
+            allCreatures.append(creature.creatureName);
+        }
+
         newPlayer.getClient().alertClient("BATTLE STARTED: " + allCreatures);
     }
     // Adds PLAYER to playersInBattle list, adds message to BattleAlerts queue
@@ -80,50 +85,16 @@ public class Battle implements Runnable {
 
     // Called by Other Creatures when they attack a Player already in Battle
     public void creatureJoinBattle(Creature creature)
-    {   // If multiple of one monster, add variance to their name (creatureName + (count))
-        int creaturenameCount = 0;
-        for(Creature existingCreature : joiningCreatures.values())
-        {
-            if(existingCreature.creatureName.equalsIgnoreCase(creature.creatureName))
-            {
-                creaturenameCount++;
-            }
-        }
-        String addCreatureName;
-        if(creaturenameCount == 0)
-        {
-            addCreatureName = creature.creatureName;
-        }
-        else
-        {
-            addCreatureName = creature.creatureName + creaturenameCount;
-        }
-        joiningCreatures.put(addCreatureName, creature);
+    {
+        joiningCreatures.put(creature.uniqueID, creature);
     }
 
     // Adds creature to creaturesInBattle, adds message to BattleAlerts queue
     private void addCreatureToBattle(Creature creature)
     {
-        int creaturenameCount = 0;
-        for(Creature existingCreature : creaturesInBattle.values())
-        {
-            if(existingCreature.creatureName.equalsIgnoreCase(creature.creatureName))
-            {
-                creaturenameCount++;
-            }
-        }
-        String addCreatureName;
-        if(creaturenameCount == 0)
-        {
-            addCreatureName = creature.creatureName;
-        }
-        else
-        {
-            addCreatureName = creature.creatureName + creaturenameCount;
-        }
-        creatureNames.add(addCreatureName);
-        creaturesInBattle.put(addCreatureName, creature);
-        battleAlerts.add(addCreatureName + " Joined The Battle!");
+        creatureNames.add(creature.uniqueID);
+        creaturesInBattle.put(creature.uniqueID, creature);
+        battleAlerts.add(creature.creatureName + " Joined The Battle!");
     }
 
 
@@ -205,14 +176,18 @@ public class Battle implements Runnable {
     // Print out Battle Alerts to all PLAYERS
     private void printBattleAlerts()
     {
-        while(!battleAlerts.isEmpty())
+        if(!battleAlerts.isEmpty())
         {
             for(Player player : playersInBattle.values())
             {
-                player.getClient().alertClient(battleAlerts.get(0));
-                battleAlerts.remove(0);
+                for(String alert : battleAlerts)
+                {
+                    player.getClient().alertClient(alert);
+                }
             }
+            battleAlerts.clear();
         }
+
     }
 
     // Loop through PLAYERS and CREATURES, taking turns doing PlayerActions and CreatureActions
@@ -270,12 +245,12 @@ public class Battle implements Runnable {
 
     private void checkDeathStatus()
     {
-        for(String creaturename : creaturesInBattle.keySet())
+        for(String creatureID : creaturesInBattle.keySet())
         {
-            Creature creature = creaturesInBattle.get(creaturename);
+            Creature creature = creaturesInBattle.get(creatureID);
             if(creature.health <= 0)
             {
-                creatureDefeated(creaturename);
+                creatureDefeated(creatureID);
             }
         }
         for(Player PLAYER : playersInBattle.values())
@@ -296,12 +271,13 @@ public class Battle implements Runnable {
     }
 
     // Remove CREATURE from Battle when Defeated, add their loot to the LootPool
-    private void creatureDefeated(String removeCreaturename)
+    private void creatureDefeated(String creatureID)
     {
-        battleAlerts.add(removeCreaturename + " was Killed!");
-        expPool = expPool + creaturesInBattle.get(removeCreaturename).exp;
-        lootPool.addAll(creaturesInBattle.get(removeCreaturename).getLoot());
-        creaturesLeaving.add(removeCreaturename);
+        battleAlerts.add(creaturesInBattle.get(creatureID).creatureName + " was Killed!");
+        expPool = expPool + creaturesInBattle.get(creatureID).exp;
+        lootPool.addAll(creaturesInBattle.get(creatureID).getLoot());
+        creaturesLeaving.add(creatureID);
+        creaturesInBattle.get(creatureID).die();
     }
 
     // Remove PLAYERS from playersLeaving queue from the playersInBattle
@@ -317,11 +293,11 @@ public class Battle implements Runnable {
     }
     private void removeCreatures()
     {
-        for(String creaturename : creaturesLeaving)
+        for(String creatureID : creaturesLeaving)
         {
-            creaturesInBattle.get(creaturename).leaveBattle();
-            creaturesInBattle.remove(creaturename);
-            creatureNames.remove(creaturename);
+            creaturesInBattle.get(creatureID).leaveBattle();
+            creaturesInBattle.remove(creatureID);
+            creatureNames.remove(creatureID);
         }
         creaturesLeaving.clear();
     }

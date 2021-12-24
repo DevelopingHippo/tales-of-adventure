@@ -3,58 +3,40 @@ import java.util.HashMap;
 public abstract class Area
 {
     public final String areaName;
-    public final Location parentLocation;
-    public final Core CORE;
-    public Area(String areaname, Location parentlocation, Core core)
+    private final Core CORE;
+
+    public Area(String areaname, Location parentLocation, Core core)
     {
         this.areaName = areaname;
-        this.parentLocation = parentlocation;
         this.CORE = core;
+        this.CORE.WORLD.areaParentLocation.put(this, parentLocation);
+        this.CORE.WORLD.locationChildArea.put(parentLocation, this);
     }
 
-    public HashMap<String, Player> playersInArea = new HashMap<>();
-    public HashMap<String, Npc> npcsInArea = new HashMap<>();
-    public HashMap<String, Creature>  creaturesInArea = new HashMap<>();
+    public HashMap<String, Area> area_NeighboringAreas = new HashMap<>();
+
 
 
 
     public abstract void startArea(Player PLAYER);
-
-
-
-
-    public void playerEnterArea(Player PLAYER, Area oldArea)
+    public void addNeighboringArea(Area neighboringArea)
     {
-        if(oldArea != null)
-        {
-            oldArea.playerLeaveArea(PLAYER);
-        }
-        playersInArea.put(PLAYER.getPlayerInfo().getName(), PLAYER);
-        parentLocation.playerLoadedArea.put(PLAYER, this);
+        area_NeighboringAreas.put(neighboringArea.areaName, neighboringArea);
+    }
+
+    public void playerEnterArea(Player PLAYER)
+    {
+        PLAYER.getPlayerInfo().setLoadedArea(this);
         PLAYER.getClient().alertClient("Entering " + areaName);
         startArea(PLAYER);
     }
-    public void playerLeaveArea(Player PLAYER)
-    {
-        playersInArea.remove(PLAYER.getPlayerInfo().getName());
-    }
-
     public void creatureEnterArea(Creature CREATURE)
     {
-        creaturesInArea.put(CREATURE.creatureName, CREATURE);
+        CREATURE.inArea = this;
     }
-    public void creatureLeaveArea(Creature CREATURE)
-    {
-        creaturesInArea.remove(CREATURE.creatureName, CREATURE);
-    }
-
     public void npcEnterArea(Npc NPC)
     {
-        npcsInArea.put(NPC.npcName, NPC);
-    }
-    public void npcLeaveArea(Npc NPC)
-    {
-        npcsInArea.remove(NPC.npcName);
+        NPC.inArea = this;
     }
 
 

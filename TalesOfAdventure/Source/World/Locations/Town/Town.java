@@ -13,9 +13,29 @@ class OldRiften extends Town implements Runnable
     public OldRiften(Core CORE)
     {
         super("Old Riften", CORE);
-        new RiftenTownGate(this, CORE);
-        new RiftenEntrance(this, CORE);
-        new RiftenTownCenter(this, CORE);
+
+        // Created Each Area
+        RiftenTownGate riftenTownGate = new RiftenTownGate(this, CORE);
+        RiftenEntrance riftenEntrance = new RiftenEntrance(this, CORE);
+        RiftenTownCenter riftenTownCenter = new RiftenTownCenter(this, CORE);
+
+        // Add Areas to World Map
+        CORE.WORLD.nameToArea.put(riftenTownGate.areaName, riftenTownGate);
+        CORE.WORLD.nameToArea.put(riftenEntrance.areaName, riftenEntrance);
+        CORE.WORLD.nameToArea.put(riftenTownCenter.areaName, riftenTownCenter);
+
+        // Add Areas to their Neighboring Areas
+
+        // Town Gate
+        riftenTownGate.addNeighboringArea(riftenEntrance);
+
+        // Town Entrance
+        riftenEntrance.addNeighboringArea(riftenTownGate);
+        riftenEntrance.addNeighboringArea(riftenTownCenter);
+
+        // Town Center
+        riftenTownCenter.addNeighboringArea(riftenEntrance);
+
     }
     @Override
     public void run()
@@ -29,8 +49,7 @@ class OldRiften extends Town implements Runnable
 
     public void playOldRiften(Player PLAYER)
     {
-        playersInLocation.put(PLAYER.getPlayerInfo().getName(), PLAYER);
-        areaMap.get("Riften Town Gate").playerEnterArea(PLAYER, null);
+        CORE.WORLD.nameToArea.get("Riften Town Gate").startArea(PLAYER);
     }
 
 
@@ -39,19 +58,24 @@ class OldRiften extends Town implements Runnable
     | Riften Town Gate |
     +------------------+
     */
-    static class RiftenTownGate extends Area
+    public static class RiftenTownGate extends Area
     {
         public RiftenTownGate(Location parentLocation, Core core)
         {
             super("Riften Town Gate", parentLocation, core);
-            parentLocation.areaMap.put(this.areaName, this);
+            new TownGuard("Lionel the Small", (Town)parentLocation,this, core);
+            new Goblin(this, core);
         }
 
         @Override
         public void startArea(Player PLAYER)
         {
+            PLAYER.getPlayerInfo().setLoadedArea(this);
+            while(PLAYER.getPlayerInfo().getLoadedArea() == this)
+            {
+                PLAYER.getPlayerAction().getInteraction(this);
+            }
         }
-
     }
 
 
@@ -60,19 +84,22 @@ class OldRiften extends Town implements Runnable
     | Riften Entrance |
     +-----------------+
     */
-    static class RiftenEntrance extends Area
+    public static class RiftenEntrance extends Area
     {
         public RiftenEntrance(Location parentLocation, Core core)
         {
             super("Riften Entrance", parentLocation, core);
-            parentLocation.areaMap.put(this.areaName, this);
-
+            new TownGuard("Jimmy the Large", (Town)parentLocation,this, core);
         }
 
         @Override
         public void startArea(Player PLAYER)
         {
-
+            PLAYER.getPlayerInfo().setLoadedArea(this);
+            while(PLAYER.getPlayerInfo().getLoadedArea() == this)
+            {
+                PLAYER.getPlayerAction().getInteraction(this);
+            }
         }
     }
 
@@ -87,12 +114,17 @@ class OldRiften extends Town implements Runnable
         public RiftenTownCenter(Location parentLocation, Core core)
         {
             super("Riften Town Center", parentLocation, core);
-            parentLocation.areaMap.put(this.areaName, this);
+            new TownGuard("Terry the Medium", (Town)parentLocation,this, core);
         }
 
         @Override
         public void startArea(Player PLAYER)
         {
+            PLAYER.getPlayerInfo().setLoadedArea(this);
+            while(PLAYER.getPlayerInfo().getLoadedArea() == this)
+            {
+                PLAYER.getPlayerAction().getInteraction(this);
+            }
 
         }
     }

@@ -81,16 +81,24 @@ public class Client implements Runnable {
     */
     public Player getPlayer() {return this.PLAYER;}
     public int getNumInput(int min, int max){
-        int intInput;
+        int intInput = -25;
         try
         {
-            intInput = Integer.parseInt(Objects.requireNonNull(getInput()));
+            try
+            {
+                intInput = Integer.parseInt(Objects.requireNonNull(getInput()));
+            }
+            catch(NumberFormatException nfe)
+            {
+                msgClient("BAD INPUT!");
+                intInput = getNumInput(min, max);
+            }
         }
-        catch(NumberFormatException e)
+        catch(NullPointerException npe)
         {
-            msgClient("BAD INPUT!");
-            intInput = getNumInput(min, max);
+            this.disconnect();
         }
+
         if(intInput < min || intInput > max)
         {
             msgClient("BAD INPUT!");
@@ -138,7 +146,23 @@ public class Client implements Runnable {
             disconnect();
         }
     }
-    private String getInput() {try {return reader.readLine();} catch (IOException e) {disconnect();} return null;}
+    private String getInput() {
+        try
+        {
+            String input = reader.readLine();
+
+            if(input == null)
+            {
+                disconnect();
+            }
+            return input;
+        }
+        catch (IOException e)
+        {
+            disconnect();
+        }
+        return null;
+    }
 
     public void disconnect()
     {

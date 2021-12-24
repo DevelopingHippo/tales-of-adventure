@@ -1,21 +1,24 @@
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Minion extends Creature implements MinionActions {
-    protected Minion(String creaturename) {super("minion", creaturename);}
+public abstract class Minion extends Creature {
+    protected Minion(String creaturename, Core core) {
+        super("minion", creaturename, core);
+    }
 
 
     @Override
     public void attack(Player PLAYER)
     {
-        PLAYER.takeDamage(damage);
+        PLAYER.takeDamage(ThreadLocalRandom.current().nextInt((damage / 2), damage));
     }
 }
 
 class Skeleton extends Minion
 {
-    public Skeleton()
+    public Skeleton(Area area, Core core)
     {
-        super("skeleton");
+        super("Skeleton", core);
+        inArea = area;
         health = 25;
         stamina = 10;
         damage = 5;
@@ -25,15 +28,16 @@ class Skeleton extends Minion
     @Override
     public void createCreatureLoot()
     {
-        creatureLoot.add(new GoldCoins(ThreadLocalRandom.current().nextInt(0, 10)));
+        creatureLoot.add(new GoldCoins(ThreadLocalRandom.current().nextInt(0, 10), CORE));
     }
 }
 
 class Goblin extends Minion
 {
-    public Goblin()
+    public Goblin(Area area, Core core)
     {
-        super("goblin");
+        super("Goblin", core);
+        inArea = area;
         health = 35;
         stamina = 10;
         damage = 5;
@@ -43,6 +47,6 @@ class Goblin extends Minion
     @Override
     public void createCreatureLoot()
     {
-        creatureLoot.add(new GoldCoins(ThreadLocalRandom.current().nextInt(0, 10)));
+        creatureLoot.add(new GoldCoins(ThreadLocalRandom.current().nextInt(0, 10), CORE));
     }
 }

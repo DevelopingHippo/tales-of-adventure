@@ -73,6 +73,10 @@ public class Console {
         {
             listActivePlayersCommand();
         }
+        else if(cmd.equalsIgnoreCase("time"))
+        {
+            System.out.println(CORE.WORLD.worldTime.getDay() + " " + CORE.WORLD.worldTime.getTime());
+        }
     }
 
 
@@ -128,7 +132,7 @@ public class Console {
     {
         for(Client client : CORE.SERVER.getActivePlayers())
         {
-            System.out.println(client.getPlayer().getUsername());
+            System.out.println(client.getPlayer().getUsername() + " : " + client.getPlayer().getPlayerInfo().getName());
         }
     }
 

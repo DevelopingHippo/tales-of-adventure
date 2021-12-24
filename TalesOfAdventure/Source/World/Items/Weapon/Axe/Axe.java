@@ -1,6 +1,7 @@
 public class Axe extends Weapon {
-    public Axe(String name)
+    public Axe(String name, Core core)
     {
+        super(core);
         itemType = "axe";
         itemName = name;
     }
@@ -8,9 +9,9 @@ public class Axe extends Weapon {
 
 
 class BronzeAxe extends Axe {
-    public BronzeAxe()
+    public BronzeAxe(Core core)
     {
-        super("Bronze Axe");
+        super("Bronze Axe", core);
         dmg = 5;
     }
 }
