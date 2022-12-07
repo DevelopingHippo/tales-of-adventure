@@ -2,8 +2,8 @@ import java.util.HashMap;
 
 public abstract class Area
 {
-    public final String areaName;
     private final Core CORE;
+    public final String areaName;
 
     public Area(String areaname, Location parentLocation, Core core)
     {

@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+  web_store:
+    container_name: web_toa
+    build:
+      context: ./Website
+      dockerfile: Dockerfile
+    ports:
+      - "8442:80"
+      - "8443:443"
+    volumes:
+      - "./Website/www/:/var/www/html"
+    networks:
+      - store
+    restart: unless-stopped
+    depends_on:
+      - db_store
+
+  db_store:
+    container_name: db_toa
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_DATABASE: tao
+      MYSQL_USER: web
+      MYSQL_PASSWORD: changeme2
+    volumes:
+      - "./Database/data:/var/lib/mysql"
+      - "./Database/Create-ToA-Database.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./Database/Create-ToA-Npc.sql:/docker-entrypoint-initdb.d/2.sql"
+      - "./Database/Create-ToA-Player.sql:/docker-entrypoint-initdb.d/3.sql"
+      - "./Database/Create-ToA-World.sql:/docker-entrypoint-initdb.d/4.sql"
+    ports:
+      - "9906:3306"
+    networks:
+      - toa
+    restart: always
+
+  gameserver_toa:
+    container_name: gameserver_toa
+    build:
+      context: ./TalesOfAdventure
+      dockerfile: Dockerfile
+    depends_on:
+      - db_toa
+
+networks:
+  toa:
+    driver: bridge

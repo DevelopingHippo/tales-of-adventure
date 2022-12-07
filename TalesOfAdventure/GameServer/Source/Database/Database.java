@@ -5,8 +5,6 @@ import java.util.LinkedList;
 
 public class Database {
 
-    // PRIVATE VARIABLES
-    private Core CORE;
     private Connection conn = null;
     private DatabaseUtil utility;
     private int logCount;
@@ -18,10 +16,10 @@ public class Database {
     */
     public Database(Core core)
     {
-        CORE = core;
+        // PRIVATE VARIABLES
         try
         {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/toa?" + "user=toa&password=P@ssw0rd123!");
+            conn = DriverManager.getConnection("jdbc:mysql://db_toa:3306/toa?" + "user=toa&password=P@ssw0rd123!");
             utility = new DatabaseUtil(conn);
             setupDatabase();
         }
@@ -39,20 +37,6 @@ public class Database {
         ResultSet result = utility.queryDatabase("SELECT MAX(logID) AS logCount FROM log");
         logCount = Integer.parseInt((utility.getResult(result, "logCount")));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -283,15 +267,6 @@ public class Database {
         }
         return characterList;
     }
-
-
-
-
-
-
-
-
-
 
 
 

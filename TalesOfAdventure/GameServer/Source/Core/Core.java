@@ -18,7 +18,7 @@ public class Core implements Runnable {
         CORE = this;
         WORLD.buildWorld();
         DATABASE = new Database(CORE);
-        SERVER = new Server(1234, this);
+        SERVER = new Server(2777, this);
         Thread coreThread = new Thread(this);
         coreThread.start();
     }
@@ -32,8 +32,6 @@ public class Core implements Runnable {
         Thread serverThread = new Thread(SERVER);
         serverThread.start();
     }
-
-
 
 
     /*

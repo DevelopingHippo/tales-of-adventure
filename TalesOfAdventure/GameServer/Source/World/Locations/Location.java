@@ -24,41 +24,36 @@ public abstract class Location {
     {
         if(this instanceof City)
         {
-            if(this instanceof HighHrothgar)
+            if(this instanceof HighHrothgar highHrothgar)
             {
-                HighHrothgar highHrothgar = (HighHrothgar)this;
                 highHrothgar.playHighHrothgar(PLAYER);
             }
         }
         else if(this instanceof Town)
         {
-            if(this instanceof OldRiften)
+            if(this instanceof OldRiften oldRiften)
             {
-                OldRiften oldRiften = (OldRiften)this;
                 oldRiften.playOldRiften(PLAYER);
             }
         }
         else if(this instanceof Dungeon)
         {
-            if(this instanceof OldCrypt)
+            if(this instanceof OldCrypt oldCrypt)
             {
-                OldCrypt oldCrypt = (OldCrypt)this;
                 oldCrypt.playOldCrypt(PLAYER);
             }
         }
         else if(this instanceof Wild)
         {
-            if(this instanceof Forest)
+            if(this instanceof Forest forest)
             {
-                Forest forest = (Forest)this;
                 forest.playForest(PLAYER);
             }
         }
         else if(this instanceof Zone)
         {
-            if(this instanceof Intro)
+            if(this instanceof Intro intro)
             {
-                Intro intro = (Intro)this;
                 intro.playIntro(PLAYER);
             }
         }
