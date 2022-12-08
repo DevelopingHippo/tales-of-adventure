@@ -14,7 +14,7 @@ services:
       - store
     restart: unless-stopped
     depends_on:
-      - db_store
+      - db_toa
 
   db_toa:
     container_name: db_toa
