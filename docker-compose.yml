@@ -27,12 +27,12 @@ services:
       MYSQL_PASSWORD: changeme2
     volumes:
       - "./Database/data:/var/lib/mysql"
-      - "./Database/Create-ToA-Database.sql:/docker-entrypoint-initdb.d/1.sql"
-      - "./Database/Create-ToA-Npc.sql:/docker-entrypoint-initdb.d/2.sql"
-      - "./Database/Create-ToA-Player.sql:/docker-entrypoint-initdb.d/3.sql"
-      - "./Database/Create-ToA-World.sql:/docker-entrypoint-initdb.d/4.sql"
+      - "./Database/init-sql/Create-ToA-Database.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./Database/init-sql/Create-ToA-Npc.sql:/docker-entrypoint-initdb.d/2.sql"
+      - "./Database/init-sql/Create-ToA-Player.sql:/docker-entrypoint-initdb.d/3.sql"
+      - "./Database/init-sql/Create-ToA-World.sql:/docker-entrypoint-initdb.d/4.sql"
     ports:
-      - "9906:3306"
+      - "3306:3306"
     networks:
       - toa
     restart: always
