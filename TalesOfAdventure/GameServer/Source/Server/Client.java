@@ -16,7 +16,8 @@ public class Client implements Runnable {
     | START / CREATION FUNCTIONS |
     +----------------------------+
     */
-    public Client(Socket clientsocket, Core core) {
+    public Client(Socket clientsocket, Core core)
+    {
         CORE = core;
         clientSocket = clientsocket;
     }

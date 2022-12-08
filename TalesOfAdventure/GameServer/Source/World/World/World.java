@@ -54,43 +54,72 @@ public class World {
     }
     public void buildWorld()
     {
+        buildCities();
+        buildTowns();
+        buildDungeons();
+        buildWilds();
+        buildZones();
+        buildDev();
+    }
 
-        // Add Towns to worldLocations
+    // Add Towns to worldLocations
+    private void buildTowns()
+    {
         OldRiften oldRiften = new OldRiften(CORE);
         worldLocations.put(oldRiften.locationName, oldRiften);
         Thread oldRiftenThread = new Thread(oldRiften);
         oldRiftenThread.start();
 
-        // Add Cities to worldLocations
+        // Add more Towns here in the format of above ^^
+    }
+
+    // Add Cities to worldLocations
+    private void buildCities()
+    {
         HighHrothgar highHrothgar = new HighHrothgar(CORE);
         worldLocations.put(highHrothgar.locationName, highHrothgar);
         Thread highHrothgarThread = new Thread(highHrothgar);
         highHrothgarThread.start();
 
-        // Add Wilds to worldLocations
+        // Add more Cities here in the format of above ^^
+    }
+
+    // Add Wilds to worldLocations
+    private void buildWilds()
+    {
         Forest forest = new Forest(CORE);
         worldLocations.put(forest.locationName, forest);
         Thread forestThread = new Thread(forest);
         forestThread.start();
 
+        // Add more Wilds here in the format of above ^^
+    }
+    private void buildDungeons()
+    {
         // Add Dungeons to worldLocations
         OldCrypt oldCrypt = new OldCrypt(CORE);
-        worldLocations.put(oldCrypt.locationName, highHrothgar);
+        worldLocations.put(oldCrypt.locationName, worldLocations.get("High Hrothgar"));
 
-        // Add Zones to worldLocations
+        // Add more Dungeons here in the format of above ^^
+    }
+
+    // Add Zones to worldLocations
+    private void buildZones()
+    {
         Intro intro = new Intro(CORE);
         worldLocations.put(intro.locationName, intro);
 
-        // Add Dev Location
-        Dev dev = new Dev(CORE);
+        // Add more Zones here in the format of above ^^
+    }
+
+    // Add Dev to worldLocations
+    private void buildDev()
+    {
+        Dev dev = new Dev(this.CORE);
         worldLocations.put(dev.locationName, dev);
-
     }
 
-
-    public Location getLocation(String locationName) {
-        return worldLocations.get(locationName);
-    }
+    public Location getLocation(String locationName) { return worldLocations.get(locationName); }
 
     public ArrayList<Creature> getCreaturesInArea(Area area)
     {

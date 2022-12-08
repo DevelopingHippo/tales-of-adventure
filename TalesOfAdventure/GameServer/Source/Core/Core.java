@@ -8,20 +8,18 @@ public class Core implements Runnable {
     public final World WORLD = new World(this);
     volatile boolean shutdown = false;
 
-    /*
-    +----------------------------+
-    | START / CREATION FUNCTIONS |
-    +----------------------------+
-    */
+    // Create new Database, Build World, and Start Server Listening on 2777 and create new thread
     public Core()
     {
         CORE = this;
         WORLD.buildWorld();
         DATABASE = new Database(CORE);
-        SERVER = new Server(1234, this);
+        SERVER = new Server(2777, this);
         Thread coreThread = new Thread(this);
         coreThread.start();
     }
+
+    // Start Thread which runs startCore()
     public void run()
     {
         startCore();
@@ -33,14 +31,7 @@ public class Core implements Runnable {
         serverThread.start();
     }
 
-
-
-
-    /*
-    +---------------------------+
-    | GENERAL PURPOSE FUNCTIONS |
-    +---------------------------+
-    */
+    // Shutdown Initiated by Console Shutdown command
     public void initiateShutdown()
     {
         DATABASE.shutdown();
