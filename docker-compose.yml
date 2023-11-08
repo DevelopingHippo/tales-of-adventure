@@ -1,52 +1,62 @@
 version: "3.7"
 services:
-  web_toa:
-    container_name: web_toa
-    build:
-      context: ./Website
-      dockerfile: Dockerfile
-    ports:
-      - "8442:80"
-      - "8443:443"
-    volumes:
-      - "./Website/www/:/var/www/html"
-    networks:
-      - toa
-    restart: unless-stopped
-    depends_on:
-      - db_toa
-
   db_toa:
     container_name: db_toa
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: changeme
-      MYSQL_DATABASE: tao
-      MYSQL_USER: web
-      MYSQL_PASSWORD: changeme2
+      MYSQL_ROOT_PASSWORD: P@ssw0rd123!
     volumes:
       - "./Database/data:/var/lib/mysql"
-      - "./Database/init-sql/Create-ToA-Database.sql:/docker-entrypoint-initdb.d/1.sql"
-      - "./Database/init-sql/Create-ToA-Npc.sql:/docker-entrypoint-initdb.d/2.sql"
-      - "./Database/init-sql/Create-ToA-Player.sql:/docker-entrypoint-initdb.d/3.sql"
-      - "./Database/init-sql/Create-ToA-World.sql:/docker-entrypoint-initdb.d/4.sql"
-    ports:
-      - "3306:3306"
+      - "./Database/init-sql/Setup-ToA-MySQL.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./Database/init-sql/Create-ToA-Databases.sql:/docker-entrypoint-initdb.d/2.sql"
+      - "./Database/init-sql/Create-ToA-Npc.sql:/docker-entrypoint-initdb.d/3.sql"
+      - "./Database/init-sql/Create-ToA-Player.sql:/docker-entrypoint-initdb.d/4.sql"
+      - "./Database/init-sql/Create-ToA-World.sql:/docker-entrypoint-initdb.d/5.sql"
     networks:
-      - toa
-    restart: always
+      - web_data
+      - toa_data
+    restart: unless-stopped
 
-  gameserver_toa:
-    container_name: gameserver_toa
+    #  web_toa:
+    #    container_name: web_toa
+    #    build:
+    #      context: Website/
+    #      dockerfile: Dockerfile
+    #    environment:
+    #      TZ: America/Detroit
+    #    ports:
+    #      - "8442:80"
+    #      - "8443:443"
+    #    volumes:
+    #      - "./Website/apache/:/var/www/apache/"
+    #    networks:
+    #      - web_data
+    #restart: unless-stopped
+  #    depends_on:
+  #      - db_toa
+
+  server_toa:
+    container_name: server_toa
     build:
-      context: ./TalesOfAdventure
+      context: TalesOfAdventure/
       dockerfile: Dockerfile
-    ports:
+    environment:
+      - DB_PASSWORD=P@ssw0rd #Example For Passing Through ENV Variables
+      - TZ=America/Detroit
+    ports: # List of Open Ports Being Honeypotted by the Application
       - "2777:2777"
     depends_on:
       - db_toa
-
+    restart: unless-stopped
+    networks:
+      - toa_data
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
 networks:
-  toa:
+  toa_data:
+    driver: bridge
+  web_data:
     driver: bridge

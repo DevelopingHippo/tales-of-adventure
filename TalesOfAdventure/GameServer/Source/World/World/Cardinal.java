@@ -25,7 +25,6 @@ public class Cardinal implements Runnable {
             checkPlayers();
             checkCreatures();
             checkNPCs();
-
         } while (!this.CORE.shutdown);
     }
 
