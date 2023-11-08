@@ -30,6 +30,7 @@ public class Database {
             System.out.println("+------------------------------------------------+");
             System.out.println("| Terminal Error: Connection to Database Failed! |");
             System.out.println("+------------------------------------------------+");
+            System.out.println(e);
             System.exit(0);
         }
     }
