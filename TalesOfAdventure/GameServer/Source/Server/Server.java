@@ -47,7 +47,8 @@ public class Server implements Runnable {
         }
         catch(IOException e)
         {
-            serverShutdown();
+            System.out.println(e);
+            CORE.initiateShutdown();
         }
     }
 
