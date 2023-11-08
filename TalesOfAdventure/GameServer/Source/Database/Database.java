@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 public class Database {
 
+    private Core CORE;
     private Connection conn = null;
     private DatabaseUtil utility;
     private int logCount;
@@ -16,6 +17,7 @@ public class Database {
     */
     public Database(Core core)
     {
+        CORE = core;
         // PRIVATE VARIABLES
         try
         {
