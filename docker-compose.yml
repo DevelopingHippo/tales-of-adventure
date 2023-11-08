@@ -8,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: P@ssw0rd123!
     volumes:
       - "./Database/data:/var/lib/mysql"
-      - "./Database/init-sql/Setup-ToA-MySQL.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./Database/init-sql/Create-ToA-MySQL.sql:/docker-entrypoint-initdb.d/1.sql"
       - "./Database/init-sql/Create-ToA-Databases.sql:/docker-entrypoint-initdb.d/2.sql"
       - "./Database/init-sql/Create-ToA-Npc.sql:/docker-entrypoint-initdb.d/3.sql"
       - "./Database/init-sql/Create-ToA-Player.sql:/docker-entrypoint-initdb.d/4.sql"

@@ -21,7 +21,7 @@ public class Database {
         // PRIVATE VARIABLES
         try
         {
-            conn = DriverManager.getConnection("jdbc:mysql://db_toa:3306/toa?" + "user=toa&password=P@ssw0rd123!");
+            conn = DriverManager.getConnection("jdbc:mysql://db_toa/toa?" + "user=toa&password=P@ssw0rd123!");
             utility = new DatabaseUtil(conn);
             setupDatabase();
         }

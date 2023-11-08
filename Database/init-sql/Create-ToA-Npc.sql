@@ -1,12 +1,5 @@
 use toa;
 
-DROP TABLE npcData;
-
-
-DROP TABLE npc;
-
-
-
 CREATE table npc (
 	npcName VARCHAR(50) NOT NULL UNIQUE,
     npcType VARCHAR(25) NOT NULL UNIQUE,

@@ -1,11 +1,5 @@
 use toa;
 
-DROP TABLE cityData;
-DROP TABLE townData;
-
-DROP TABLE worldLocation;
-
-
 CREATE TABLE worldLocation (
 	locationName VARCHAR(50) NOT NULL,
     locationType VARCHAR(25) NOT NULL,

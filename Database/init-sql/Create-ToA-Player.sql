@@ -1,16 +1,4 @@
 use toa;
-DROP TABLE onehandedSkill;
-DROP TABLE twohandedSkill;
-DROP TABLE rangedSkill;
-DROP TABLE magickSkill;
-DROP TABLE blockSkill;
-DROP TABLE fishingSkill;
-
-DROP TABLE playerInventory;
-DROP TABLE playerCharacter;
-DROP TABLE account;
-
-
 
 # ACCOUNT INFORMATION
 CREATE TABLE account (
