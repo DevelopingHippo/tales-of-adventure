@@ -34,13 +34,6 @@ public abstract class Creature {
 
 
 
-
-
-
-
-
-
-
     public Battle battle(Player PLAYER)
     {
         if(!this.battleState)

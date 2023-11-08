@@ -126,7 +126,7 @@ public class Battle implements Runnable {
     // Battle Check Loop, exits when either 0 Players OR 0 Creatures in the Battle
     public void startBattle()
     {
-        while (creaturesInBattle.size() > 0 && playersInBattle.size() > 0)
+        while (!creaturesInBattle.isEmpty() && !playersInBattle.isEmpty())
         {
             if (!joiningCreatures.isEmpty() || !playersJoining.isEmpty())
             {
@@ -140,7 +140,7 @@ public class Battle implements Runnable {
             {
                 removePlayers();
             }
-            if(creaturesInBattle.size() > 0 && playersInBattle.size() > 0)
+            if(!creaturesInBattle.isEmpty() && !playersInBattle.isEmpty())
             {
                 battleLoop();
             }
