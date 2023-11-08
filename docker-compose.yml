@@ -9,7 +9,7 @@ services:
     volumes:
       - "./Database/data:/var/lib/mysql"
       - "./Database/init-sql/Create-ToA-MySQL.sql:/docker-entrypoint-initdb.d/1.sql"
-      - "./Database/init-sql/Create-ToA-Databases.sql:/docker-entrypoint-initdb.d/2.sql"
+      - "./Database/init-sql/Create-ToA-Database.sql:/docker-entrypoint-initdb.d/2.sql"
       - "./Database/init-sql/Create-ToA-Npc.sql:/docker-entrypoint-initdb.d/3.sql"
       - "./Database/init-sql/Create-ToA-Player.sql:/docker-entrypoint-initdb.d/4.sql"
       - "./Database/init-sql/Create-ToA-World.sql:/docker-entrypoint-initdb.d/5.sql"
