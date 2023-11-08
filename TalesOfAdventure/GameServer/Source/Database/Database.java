@@ -289,7 +289,7 @@ public class Database {
             int logNum = logCount++;
             try
             {
-                PreparedStatement sqlStmt = conn.prepareStatement("INSERT INTO Log VALUES (?, ?, ?, ? , ?)");
+                PreparedStatement sqlStmt = conn.prepareStatement("INSERT INTO log VALUES (?, ?, ?, ? , ?)");
                 sqlStmt.setString(1, String.valueOf(logNum));
                 sqlStmt.setString(2, String.valueOf(LocalDate.now()));
                 sqlStmt.setString(3, String.valueOf(LocalTime.now()));
