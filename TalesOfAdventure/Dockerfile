@@ -4,7 +4,7 @@ FROM amazoncorretto:19
 
 WORKDIR /app
 
-COPY ./Compiled/artifacts/tales_of_adventure_jar/tales-of-adventure.jar /app/GameServer.jar
+COPY ./GameServer/Compiled/artifacts/tales_of_adventure_jar/tales-of-adventure.jar /app/GameServer.jar
 
 EXPOSE 2777
 
